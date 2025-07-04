@@ -39,22 +39,16 @@ export async function fetchProfile() {
                 // console.log({ user, roleToken, token });
                 (await cookieStore).set('token', token, {
                     httpOnly: true,
-                    // secure: true,
+                    secure: true,
                     path: '/',
                     maxAge: 60 * 15, // 15 minutes
                 });
                 (await cookieStore).set('roleToken', roleToken, {
                     httpOnly: true,
-                    // secure: true,
+                    secure: true,
                     path: '/',
                     maxAge: 60 * 15, // 15 minutes
                 });
-                // (await cookieStore).set('user', JSON.stringify(user), {
-                //     httpOnly: true,
-                //     // secure: true,
-                //     path: '/',
-                //     // maxAge: 60 * 60, // 1 hour
-                // }); // store user in cookie
 
                 data = await fetch(`https://${process.env.JWT_AUTH_API_DOMAIN}/api/profile`, { ////////////////
                     headers: {
@@ -105,19 +99,19 @@ export async function fetchUsers() {
                 const { roleToken, token }: { roleToken: string, token: string } = await refreshRes.json();
                 (await cookieStore).set('token', token, {
                     httpOnly: true,
-                    // secure: true,
+                    secure: true,
                     path: '/',
                     maxAge: 60 * 15, // 15 minutes
                 });
                 (await cookieStore).set('roleToken', roleToken, {
                     httpOnly: true,
-                    // secure: true,
+                    secure: true,
                     path: '/',
                     maxAge: 60 * 15, // 15 minutes
                 });
                 // (await cookieStore).set('user', JSON.stringify(user), {
                 //     httpOnly: true,
-                //     // secure: true,
+                //     secure: true,
                 //     path: '/',
                 //     // maxAge: 60 * 60, // 1 hour
                 // }); // store user in cookie
@@ -170,19 +164,19 @@ export async function fetchUsersWithDetails() {
                 const { roleToken, token }: { roleToken: string, token: string } = await refreshRes.json();
                 (await cookieStore).set('token', token, {
                     httpOnly: true,
-                    // secure: true,
+                    secure: true,
                     path: '/',
                     maxAge: 60 * 15, // 15 minutes
                 });
                 (await cookieStore).set('roleToken', roleToken, {
                     httpOnly: true,
-                    // secure: true,
+                    secure: true,
                     path: '/',
                     maxAge: 60 * 15, // 15 minutes
                 });
                 // (await cookieStore).set('user', JSON.stringify(user), {
                 //     httpOnly: true,
-                //     // secure: true,
+                //     secure: true,
                 //     path: '/',
                 //     // maxAge: 60 * 60, // 1 hour
                 // }); // store user in cookie

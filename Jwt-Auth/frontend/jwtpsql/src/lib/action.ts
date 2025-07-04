@@ -55,9 +55,9 @@ export async function LoginAction(prevState: State, formData: FormData) {
 
         (await cookieStore).set('token', token, {
             httpOnly: true,
-            // secure: true,
+            secure: true,
             path: '/',
-            maxAge: 15 * 60, // 15 minutes
+            maxAge: 5 * 60, // 15 minutes
         }); // store token in cookie
         // maxAge is in seconds.
         // Setting maxAge will cause the cookie to become a persistent cookie with an explicit expiration.
@@ -68,18 +68,10 @@ export async function LoginAction(prevState: State, formData: FormData) {
 
         (await cookieStore).set('roleToken', roleToken, {
             httpOnly: true,
-            // secure: true,
+            secure: true,
             path: '/',
-            maxAge: 60 * 15, // 15 minutes
+            maxAge: 60 * 5, // 15 minutes
         });
-
-        // (await cookieStore).set('user', JSON.stringify(user), {
-        //     httpOnly: true,
-        //     // secure: true,
-        //     path: '/',
-        //     maxAge: 60 * 15, // 15 minutes
-        // }); // store user in cookie
-        // // console.log((await cookieStore).get('user')?.value);
 
         // const role = user.roles.find(x => x.name === 'ROLE_ADMIN') ? 'ROLE_ADMIN' : 'ROLE_USER';
         // console.log(role);
@@ -149,7 +141,7 @@ export async function RegisterAction(prevState: State, formData: FormData) {
 
         (await cookieStore).set('token', token, {
             httpOnly: true,
-            // secure: true,
+            secure: true,
             path: '/',
             maxAge: 15 * 60, // 15 minutes
         }); // store token in cookie
@@ -161,18 +153,10 @@ export async function RegisterAction(prevState: State, formData: FormData) {
 
         (await cookieStore).set('roleToken', roleToken, {
             httpOnly: true,
-            // secure: true,
+            secure: true,
             path: '/',
             maxAge: 60 * 15, // 15 minutes
         });
-
-        // (await cookieStore).set('user', JSON.stringify(user), {
-        //     httpOnly: true,
-        //     // secure: true,
-        //     path: '/',
-        //     maxAge: 60 * 15, // 5 minutes
-        // }); // store user in cookie
-        // // console.log((await cookieStore).get('user')?.value);
 
         // const role = user.roles.find(x => x.name === 'ROLE_ADMIN') ? 'ROLE_ADMIN' : 'ROLE_USER';
         // console.log(role);

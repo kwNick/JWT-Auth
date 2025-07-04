@@ -120,7 +120,7 @@ public class AuthController {
     @PostMapping("/refresh")
     public ResponseEntity<?> refreshToken(HttpServletRequest request, HttpServletResponse response) {
         final Cookie[] cookies = request.getCookies();
-        System.out.println("Cookies: " + Arrays.toString(cookies));
+        // System.out.println("Cookies: " + Arrays.toString(cookies));
         final String refreshToken = Arrays.stream(cookies) // java.lang.NullPointerException: Cannot read the array length because "array" is null
             .filter(c -> c.getName().equals("refreshToken"))
             .findFirst()
