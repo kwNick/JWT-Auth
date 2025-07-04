@@ -18,11 +18,11 @@
 
 import { DeleteAction } from '@/lib/action';
 import { useTransition } from 'react';
-import { useRouter } from 'next/navigation';
+// import { useRouter } from 'next/navigation';
 
 const DeleteButton = () => {
     const [isPending, startTransition] = useTransition();
-    const router = useRouter();
+    // const router = useRouter();
 
     const handleClick = () => {
         startTransition(() => {

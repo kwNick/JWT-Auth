@@ -1,7 +1,7 @@
 'use client';
 import Link from "next/link"
 import { useEffect, useState, useTransition } from "react";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 import { LogoutAction } from "@/lib/action";
 // import SignoutButton from "./SignoutButton";
 // import LoginNavItems from "./LoginNavItems";
@@ -10,7 +10,7 @@ const AuthButtons = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
     const [login, setLogin] = useState(isLoggedIn);
     const [isPending, startTransition] = useTransition();
 
-    const router = useRouter();
+    // const router = useRouter();
 
     // const handleSignout = async () => { //maybe put this in a server action file
     //     const data = await fetch('/api/signout', { method: 'POST' });

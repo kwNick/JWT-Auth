@@ -18,7 +18,7 @@ export async function middleware(request: NextRequest) {
 
     let isAdmin = false; // Default to false
     if (roleToken?.value) {
-        const { payload }: { payload: { roles: string[] } } = await jwtVerify(roleToken?.value, new TextEncoder().encode("secret-key-making-it-very-strong"));
+        const { payload }: { payload: { roles: string[] } } = await jwtVerify(roleToken?.value, new TextEncoder().encode(`${process.env.API_SECRET_KEY}`));
         // console.log("payload.roles: ", payload.roles);
         isAdmin = payload?.roles?.includes('ROLE_ADMIN') || false; // Check if the user has admin roles
     }
