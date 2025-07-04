@@ -40,7 +40,7 @@ export async function LoginAction(prevState: State, formData: FormData) {
 
     const { username, password }: { username: string, password: string } = validatedFields.data;
     try {
-        const response = await fetch(`http://${process.env.JWT_AUTH_API_DOMAIN}/auth/login-refresh`, {
+        const response = await fetch(`https://${process.env.JWT_AUTH_API_DOMAIN}/auth/login-refresh`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -134,7 +134,7 @@ export async function RegisterAction(prevState: State, formData: FormData) {
     const { username, email, password }: { username: string, email: string, password: string } = validatedFields.data;
     try {
 
-        const response = await fetch(`http://${process.env.JWT_AUTH_API_DOMAIN}/auth/register-refresh`, {
+        const response = await fetch(`https://${process.env.JWT_AUTH_API_DOMAIN}/auth/register-refresh`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -190,7 +190,7 @@ export async function RegisterAction(prevState: State, formData: FormData) {
 
 export async function LogoutAction() {
     try {
-        const res = await fetch(`http://${process.env.JWT_AUTH_API_DOMAIN}/auth/logout-refresh`, {
+        const res = await fetch(`https://${process.env.JWT_AUTH_API_DOMAIN}/auth/logout-refresh`, {
             method: 'POST',
             credentials: 'include'
         });
@@ -221,7 +221,7 @@ export async function LogoutAction() {
 
 export async function DeleteAction() {
     try {
-        const res = await fetch(`http://${process.env.JWT_AUTH_API_DOMAIN}/api/delete`, {
+        const res = await fetch(`https://${process.env.JWT_AUTH_API_DOMAIN}/api/delete`, {
             method: 'DELETE',
             credentials: 'include'
         });
