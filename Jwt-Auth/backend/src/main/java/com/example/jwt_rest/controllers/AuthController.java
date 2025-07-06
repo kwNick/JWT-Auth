@@ -126,7 +126,7 @@ public class AuthController {
             .findFirst()
             .map(Cookie::getValue)
             .orElse(null);
-        System.out.println("Refresh Token: " + refreshToken);
+        // System.out.println("Refresh Token: " + refreshToken);
 
         final String username = jwtUtil.extractUsername(refreshToken);
         final UserDetails user = userDetailsService.loadUserByUsername(username);

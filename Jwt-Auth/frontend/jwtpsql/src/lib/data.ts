@@ -23,9 +23,6 @@ export async function fetchProfile() {
             const refreshRes = await fetch(`https://${process.env.JWT_AUTH_API_DOMAIN}/auth/refresh`, { //////////////////
                 method: 'POST',
                 credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
             });
             console.log('refreshRes: ', refreshRes.status, refreshRes.ok, refreshRes.body);
             if (!refreshRes.ok) {
