@@ -11,6 +11,7 @@ const NavAuth = async () => {
     const token = (await cookieStore).get("token")?.value;
     const isLoggedIn = token && token != "" ? true : false;
     const roleToken = (await cookieStore).get("roleToken");
+
     let isAdmin = false; // Default to false
     if (roleToken?.value) {
         const { payload }: { payload: { roles: string[] } } = await jwtVerify(roleToken?.value, new TextEncoder().encode("secret-key-making-it-very-strong"));

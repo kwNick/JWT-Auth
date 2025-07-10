@@ -25,17 +25,17 @@ export default function RegisterPage() {
         // }
 
         router.refresh(); // Trigger a soft page reload after registration; If you don't want to use context
-    }, [router, state]);
+    }, [router, state]); //why is state here? Because we want to refresh the page when the state changes, especially after a successful registration.
 
     useEffect(() => {
         if (isPending) {
-            setFormMessage("...Pending Login");
+            setFormMessage("...Pending Registration");
         }
         if (isUpdated && !isPending) {
             setFormMessage("");
         }
         if (!isUpdated) {
-            setFormMessage("Must update fields to Login!");
+            setFormMessage("Must update fields to Register!");
         }
     }, [isPending, isUpdated]);
 
@@ -63,6 +63,7 @@ export default function RegisterPage() {
                     className="border p-2 w-full"
                     required
                 />
+
                 <label htmlFor="email">Email</label>
                 <input
                     id="email"
@@ -74,6 +75,7 @@ export default function RegisterPage() {
                     className="border p-2 w-full"
                     required
                 />
+
                 <label htmlFor="password">Password</label>
                 <input
                     id="password"
@@ -85,9 +87,11 @@ export default function RegisterPage() {
                     className="border p-2 w-full"
                     required
                 />
+
                 <button type="submit" className="bg-blue-500 text-white px-4 py-2">
                     Register
                 </button>
+
                 <div id="rated-error" aria-live="polite" aria-atomic="true">
                     {state?.errors?.username &&
                         state.errors.username.map((error: string) => (

@@ -2,6 +2,7 @@ import User from '@/lib/userModel'
 import { fetchProfile, fetchRoles, fetchShops, fetchUsers, fetchUsersWithDetails } from '@/lib/data'
 import Shop from '@/lib/shopModel';
 import Role from '@/lib/roleModel';
+import DeleteButton from '@/components/DeleteButton';
 // import { cookies } from 'next/headers';
 // import jwt from "jsonwebtoken";
 
@@ -28,8 +29,8 @@ export default async function DashboardPage() {
     const users: User[] = res._embedded.users;
     // console.log(users);
 
-    const resDetails: User[] = await fetchUsersWithDetails();
-    // console.log(resDetails);
+    const userDetails: User[] = await fetchUsersWithDetails();
+    // console.log(userDetails);
 
     const res2 = await fetchShops();
     // console.log(res2);
@@ -80,7 +81,7 @@ export default async function DashboardPage() {
             <h1 className="text-xl font-semibold mb-4">All Connections: </h1>
             {/* <UsersList /> */}
             <ul>
-                {resDetails.map((user: User) => (
+                {userDetails.map((user: User) => (
                     <li key={user.username}>{user.username} - {user.email} - {user.password}  - {user.shops.map((shop) => {
                         return (
                             <span key={shop.name}>{shop.name} - {shop.location} - {shop.user_id}</span>
@@ -110,12 +111,27 @@ export default async function DashboardPage() {
             </ul>
 
             <h1 className="text-xl font-semibold mb-4">Roles</h1>
-            {/* <ShopsList /> */}
+            {/* <RolesList /> */}
             <ul>
                 {roles.map((role: Role) => (
                     <li key={role.name}>{role.id} - {role.name}</li>
                 ))}
             </ul>
+
+            <div>
+                <h1>
+                    DeleteUser...
+                </h1>
+                <div>
+                    <p>
+                        To delete a user, you can use the <code>DELETE</code> HTTP method on the endpoint:
+                    </p>DELETE on http://localhost:8080/api/delete`
+                    <p>
+                        Note: Make sure to handle this operation carefully as it will permanently remove the user and their associated data.
+                    </p>
+                </div>
+                <DeleteButton />
+            </div>
         </div>
     )
 }

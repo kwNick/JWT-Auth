@@ -12,14 +12,6 @@ const AuthButtons = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
 
     // const router = useRouter();
 
-    // const handleSignout = async () => { //maybe put this in a server action file
-    //     const data = await fetch('/api/signout', { method: 'POST' });
-    //     // console.log(data);
-    //     router.replace('/');
-    //     router.refresh(); // Trigger a soft page reload after logout; If you don't want to use context
-
-    // };
-
     const handleSignout2 = async () => { //maybe put this in a server action file
         startTransition(() => {
             LogoutAction();
