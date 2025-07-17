@@ -41,7 +41,7 @@ export default function Home() {
 
         <div className="h-full w-full flex flex-col gap-[8px] items-center sm:items-start justify-center">
           <p className="text-[16px] sm:text-[20px] text-center sm:text-left">
-            You can also register a new user by clicking the "Register" button in the navigation bar.
+            You can also register a new user by clicking the &quot;Register&quot; button in the navigation bar.
           </p>
         </div>
 
