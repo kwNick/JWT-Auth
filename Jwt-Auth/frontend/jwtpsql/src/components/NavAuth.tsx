@@ -20,7 +20,7 @@ const NavAuth = async () => {
     }
 
     return (
-        <div className="w-full h-full flex items-center justify-around">
+        <div className="p-3 w-full h-full flex items-center justify-around bg-white rounded-tl-2xl rounded-br-2xl shadow-md">
 
             <HomeButton />
 

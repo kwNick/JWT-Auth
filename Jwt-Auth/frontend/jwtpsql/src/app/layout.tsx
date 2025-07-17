@@ -26,12 +26,21 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen`}
       >
-        <nav className="p-3 w-full h-1/5">
+        <nav className="p-3 w-full h-1/6 bg-blue-400">
           <NavAuth />
         </nav>
-        {children}
+
+        <div className="p-8 bg-blue-400">
+          {children}
+        </div>
+
+        <footer className="mx-5 w-full h-[10vh] flex items-center justify-center bg-white rounded-t-2xl shadow-md">
+          <p className="text-center text-gray-600">
+            © {new Date().getFullYear()} POS System. All rights reserved.
+          </p>
+        </footer>
       </body>
     </html>
   );

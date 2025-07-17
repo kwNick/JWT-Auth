@@ -2,6 +2,8 @@ package com.example.jwt_rest.configurations;
 
 import java.util.List;
 
+// import org.springframework.security.authentication.AuthenticationProvider;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -40,7 +42,10 @@ public class SecurityConfig {
                                 // .requestMatchers("/api/**").hasAnyRole("USER", "ADMIN") // Only USER or ADMIN can fetch from the spring app on routes /users/**
                                 .anyRequest().authenticated()
                 )
+                // .exceptionHandling(ex -> ex.authenticationEntryPoint(unauthorizedHandler))
+                // Stateless session (required for JWT)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) //no sessions
+                // .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class) //Ensures your JwtFilter is executed before the default login filter, so it can validate the token early.
                 .build();
     }
@@ -83,6 +88,7 @@ public class SecurityConfig {
         //         .build();
     }
 
+    
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

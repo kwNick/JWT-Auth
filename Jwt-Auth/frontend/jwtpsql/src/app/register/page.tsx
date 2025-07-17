@@ -48,10 +48,10 @@ export default function RegisterPage() {
     }, [username, password, email]);
 
     return (
-        <div className="max-w-md mx-auto mt-10">
-            <h2 className="text-2xl font-bold mb-4">Register</h2>
+        <div className="pt-5 flex flex-col items-center justify-center min-h-[75vh] bg-white rounded-tl-2xl rounded-br-2xl shadow-md">
+            <h2 className="text-3xl font-bold">Register</h2>
             {/* < RegisterForm /> */}
-            <form action={formAction} className="space-y-4">
+            <form action={formAction} className="space-y-4 w-3/5">
                 <label htmlFor="username">Username</label>
                 <input
                     id="username"
