@@ -23,7 +23,7 @@ export default function Home() {
             <strong>Email:</strong> <em>Alex</em>
           </p>
           <p className="text-[16px] sm:text-[20px] text-center sm:text-left">
-            <strong>Password:</strong> <em>hashedpassword2</em>
+            <strong>Password:</strong> <em>hashedpassword1</em>
           </p>
         </div>
 
