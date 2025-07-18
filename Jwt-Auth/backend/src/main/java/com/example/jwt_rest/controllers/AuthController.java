@@ -97,13 +97,12 @@ public class AuthController {
         // );
         // response.setHeader("Set-Cookie", cookie); //what is the difference between setheader and addheader?
 
-
         ResponseCookie cookie = ResponseCookie.from("refreshToken", refreshToken)
             .httpOnly(true)
             .secure(true) // Secure = false in dev, true in prod with HTTPS
             .path("/")
             .maxAge(3600)
-            .sameSite("None") // Allows cross-site cookies
+            .sameSite("None") // Allows cross-site cookies; for dev, set to "Lax" or "Strict" if needed
             .build();
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
 
@@ -121,6 +120,7 @@ public class AuthController {
     public ResponseEntity<?> refreshToken(HttpServletRequest request, HttpServletResponse response) {
         final Cookie[] cookies = request.getCookies();
         // System.out.println("Cookies: " + Arrays.toString(cookies));
+        
         final String refreshToken = Arrays.stream(cookies) // java.lang.NullPointerException: Cannot read the array length because "array" is null
             .filter(c -> c.getName().equals("refreshToken"))
             .findFirst()
