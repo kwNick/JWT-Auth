@@ -5,8 +5,8 @@ import { jwtVerify } from 'jose';
 export async function middleware(request: NextRequest) {
     // console.log(request.cookies);
 
-    const refreshToken = request.cookies.get('refreshToken'); // use NextRequest in middleware to access cookies
-    console.log("RefreshToken: ", refreshToken);
+    // const refreshToken = request.cookies.get('refreshToken'); // use NextRequest in middleware to access cookies
+    // console.log("RefreshToken: ", refreshToken);
 
     const token = request.cookies.get('token'); // use NextRequest in middleware to access cookies
     // console.log("token: ", token);
@@ -15,10 +15,10 @@ export async function middleware(request: NextRequest) {
     if (token?.value) {
         isLoggedIn = true; // If token exists, user is logged in
     }
-    if (token === undefined) {
-        console.log("token is undefined");
-        refreshToken?.value ? isLoggedIn = true : isLoggedIn = false; // If token is undefined, check refreshToken
-    }
+    // if (token === undefined) {
+    //     console.log("token is undefined");
+    //     refreshToken?.value ? isLoggedIn = true : isLoggedIn = false; // If token is undefined, check refreshToken
+    // }
 
     const roleToken = request.cookies.get('roleToken'); // use NextRequest in middleware to access cookies
     // console.log("roleToken: ", roleToken);

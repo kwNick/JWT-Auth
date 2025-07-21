@@ -38,13 +38,13 @@ export async function fetchProfile() {
                     httpOnly: true,
                     secure: true,
                     path: '/',
-                    maxAge: 60 * 3, // 15 minutes
+                    maxAge: 60 * 15, // 15 minutes
                 });
                 (await cookieStore).set('roleToken', roleToken, {
                     httpOnly: true,
                     secure: true,
                     path: '/',
-                    maxAge: 60 * 3, // 15 minutes
+                    maxAge: 60 * 15, // 15 minutes
                 });
 
                 data = await fetch(`https://${process.env.JWT_AUTH_API_DOMAIN}/api/profile`, {
@@ -98,13 +98,13 @@ export async function fetchUsers() {
                     httpOnly: true,
                     secure: true,
                     path: '/',
-                    maxAge: 60 * 3, // 15 minutes
+                    maxAge: 60 * 15, // 15 minutes
                 });
                 (await cookieStore).set('roleToken', roleToken, {
                     httpOnly: true,
                     secure: true,
                     path: '/',
-                    maxAge: 60 * 3, // 15 minutes
+                    maxAge: 60 * 15, // 15 minutes
                 });
 
                 data = await fetch(`https://${process.env.JWT_AUTH_API_DOMAIN}/users`, {
@@ -157,13 +157,13 @@ export async function fetchUsersWithDetails() {
                     httpOnly: true,
                     secure: true,
                     path: '/',
-                    maxAge: 60 * 3, // 15 minutes
+                    maxAge: 60 * 15, // 15 minutes
                 });
                 (await cookieStore).set('roleToken', roleToken, {
                     httpOnly: true,
                     secure: true,
                     path: '/',
-                    maxAge: 60 * 3, // 15 minutes
+                    maxAge: 60 * 15, // 15 minutes
                 });
 
                 data = await fetch(`https://${process.env.JWT_AUTH_API_DOMAIN}/api/users`, {
@@ -216,13 +216,13 @@ export async function fetchShops() {
                     httpOnly: true,
                     // secure: true,
                     path: '/',
-                    maxAge: 60 * 3, // 15 minutes
+                    maxAge: 60 * 15, // 15 minutes
                 });
                 (await cookieStore).set('roleToken', roleToken, {
                     httpOnly: true,
                     // secure: true,
                     path: '/',
-                    maxAge: 60 * 3, // 15 minutes
+                    maxAge: 60 * 15, // 15 minutes
                 });
 
                 data = await fetch(`https://${process.env.JWT_AUTH_API_DOMAIN}/shops`, {
@@ -275,13 +275,13 @@ export async function fetchRoles() {
                     httpOnly: true,
                     // secure: true,
                     path: '/',
-                    maxAge: 60 * 3, // 15 minutes
+                    maxAge: 60 * 15, // 15 minutes
                 });
                 (await cookieStore).set('roleToken', roleToken, {
                     httpOnly: true,
                     // secure: true,
                     path: '/',
-                    maxAge: 60 * 3, // 15 minutes
+                    maxAge: 60 * 15, // 15 minutes
                 });
 
                 data = await fetch(`https://${process.env.JWT_AUTH_API_DOMAIN}/roles`, {
