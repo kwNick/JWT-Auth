@@ -43,29 +43,29 @@ const page = async () => {
     // console.log(roles);
 
     return (
-        <div className="p-4 flex flex-col items-center justify-center min-h-[75vh] font-[family-name:var(--font-geist-sans)] bg-white rounded-tl-2xl rounded-br-2xl shadow-md">
+        <div className="p-4 flex flex-col gap-y-5 justify-center min-h-[75vh] font-[family-name:var(--font-geist-sans)] bg-white rounded-tl-2xl rounded-br-2xl shadow-md">
 
-            <div className="w-full max-w-2xl p-3 flex bg-gray-300 rounded-tl-2xl rounded-br-2xl shadow-md">
-                <h1 className="text-xl font-semibold mb-4">Hello, User - {profile.username} - <span className='text-xs'>{profile.roles.map(role => role.name)}</span></h1>
+            <div className="w-2/5">
+                <h1 className="text-3xl font-semibold mb-4">Hello, User - {profile.username} - <span className='text-xs'>{profile.roles.map(role => role.name)}</span></h1>
+            </div>
 
-
-                {/* <h1 className="text-xl font-semibold mb-4">Cookies User from login/registration: {JSON.stringify(user)}</h1> */}
+            <div className="flex gap-8">
                 <div className="w-full max-w-2xl p-3 bg-gray-300 rounded-tl-2xl rounded-br-2xl shadow-md">
 
                     <h1 className="text-xl font-semibold mb-4">Fetched from springboot /api/profile:</h1>
 
-                    <div>
-                        <p>Username: {profile.username}</p>
-                        <p>Email: {profile.email}</p>
-                        <p>Password: {profile.password}</p>
-                        <p>Shops:
+                    <div className="flex flex-col gap-2">
+                        <p><span className="font-semibold">Username</span>: {profile.username}</p>
+                        <p><span className="font-semibold">Email</span>: {profile.email}</p>
+                        <p><span className="font-semibold">Password</span>: {profile.password}</p>
+                        <p><span className="font-semibold">Shops</span>:
                             {profile.shops.map((shop: Shop) => {
                                 return (
                                     <span className="italic" key={shop.name}>{shop.name} - {shop.location} - {shop.user_id}</span>
                                 );
                             })}
                         </p>
-                        <p>Roles:
+                        <p><span className="font-semibold">Roles</span>:
                             {profile.roles.map((role: Role) => {
                                 return (
                                     <span className="italic" key={role.name}>{role.name}</span>
@@ -94,50 +94,12 @@ const page = async () => {
                 </div>
             </div>
 
-            {/* <h1 className="text-xl font-semibold mb-4">All Connections: </h1> */}
-            {/* <UsersList /> */}
-            {/* <ul>
-                {userDetails.map((user: User) => (
-                    <li key={user.username}>{user.username} - {user.email} - {user.password}  - {user.shops.map((shop) => {
-                        return (
-                            <span className="italic" key={shop.name}>{shop.name} - {shop.location} - {shop.user_id}</span>
-                        );
-                    })} - {user.roles.map((role) => {
-                        return (
-                            <span className="italic" key={role.name}>{role.name}</span>
-                        )
-                    })}</li>
-                ))}
-            </ul>
-
-            <h1 className="text-xl font-semibold mb-4">Users</h1> */}
-            {/* <UsersList /> */}
-            {/* <ul>
-                {users.map((user: User) => (
-                    <li key={user.username}>{user.username} - {user.email} - {user.password}  - {user._links.self.href} - {user._links.user.href} - {user._links.shops.href}- {user._links.roles.href}</li>
-                ))}
-            </ul> */}
-
-            {/* <h1 className="text-xl font-semibold mb-4">Shops</h1> */}
-            {/* <ShopsList /> */}
-            {/* <ul>
-                {shops.map((shop: Shop) => (
-                    <li key={shop.name}>{shop.name} - {shop.location}</li>
-                ))}
-            </ul> */}
-
-            {/* <h1 className="text-xl font-semibold mb-4">Roles</h1> */}
-            {/* <RolesList /> */}
-            {/* <ul>
-                {roles.map((role: Role) => (
-                    <li key={role.name}>{role.id} - {role.name}</li>
-                ))}
-            </ul> */}
-
-            <div>
-                <h1>
-                    DeleteUser...
-                </h1>
+            <div className="flex flex-col gap-y-4">
+                <div>
+                    <h1>
+                        DeleteUser...
+                    </h1>
+                </div>
                 <div>
                     <p>
                         To delete a user, you can use the <code>DELETE</code> HTTP method on the endpoint:
@@ -146,7 +108,9 @@ const page = async () => {
                         Note: Make sure to handle this operation carefully as it will permanently remove the user and their associated data.
                     </p>
                 </div>
-                <DeleteButton />
+                <div>
+                    <DeleteButton />
+                </div>
             </div>
         </div>
     )
