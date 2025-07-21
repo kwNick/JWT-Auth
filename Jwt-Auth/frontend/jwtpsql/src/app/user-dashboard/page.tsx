@@ -43,37 +43,55 @@ const page = async () => {
     // console.log(roles);
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-[75vh] font-[family-name:var(--font-geist-sans)] bg-white rounded-tl-2xl rounded-br-2xl shadow-md">
-            <h1 className="text-xl font-semibold mb-4">Hello, User - {profile.username} - <span className='text-xs'>{profile.roles.map(role => role.name)}</span></h1>
+        <div className="p-4 flex flex-col items-center justify-center min-h-[75vh] font-[family-name:var(--font-geist-sans)] bg-white rounded-tl-2xl rounded-br-2xl shadow-md">
 
-            <div>
-                <h2>Your Shops</h2>
-                <div>
-                    {profile.shops.length > 0 ? (
-                        <ul>
-                            {profile.shops.map((shop: Shop) => (
-                                <li key={shop.name}>{shop.name} - {shop.location}</li>
-                            ))}
-                        </ul>
-                    ) : (
-                        <p>You have no shops.</p>
-                    )}
+            <div className="w-full max-w-2xl p-3 bg-gray-300 rounded-tl-2xl rounded-br-2xl shadow-md">
+                <h1 className="text-xl font-semibold mb-4">Hello, User - {profile.username} - <span className='text-xs'>{profile.roles.map(role => role.name)}</span></h1>
+
+
+                {/* <h1 className="text-xl font-semibold mb-4">Cookies User from login/registration: {JSON.stringify(user)}</h1> */}
+                <div className="w-full max-w-2xl p-3 bg-gray-300 rounded-tl-2xl rounded-br-2xl shadow-md">
+
+                    <h1 className="text-xl font-semibold mb-4">Fetched from springboot /api/profile:</h1>
+
+                    <div>
+                        <p>Username: {profile.username}</p>
+                        <p>Email: {profile.email}</p>
+                        <p>Password: {profile.password}</p>
+                        <p>Shops:
+                            {profile.shops.map((shop: Shop) => {
+                                return (
+                                    <span className="italic" key={shop.name}>{shop.name} - {shop.location} - {shop.user_id}</span>
+                                );
+                            })}
+                        </p>
+                        <p>Roles:
+                            {profile.roles.map((role: Role) => {
+                                return (
+                                    <span className="italic" key={role.name}>{role.name}</span>
+                                )
+                            })}
+                        </p>
+                    </div>
                 </div>
-            </div>
 
-            {/* <h1 className="text-xl font-semibold mb-4">Cookies User from login/registration: {JSON.stringify(user)}</h1> */}
 
-            <h1 className="text-xl font-semibold mb-4">Fetched from springboot /api/profile:</h1>
-            <div>
-                <p>{profile.username} - {profile.email} - {profile.password}  - {profile.shops.map((shop: Shop) => {
-                    return (
-                        <span className="italic" key={shop.name}>{shop.name} - {shop.location} - {shop.user_id}</span>
-                    );
-                })} - {profile.roles.map((role: Role) => {
-                    return (
-                        <span className="italic" key={role.name}>{role.name}</span>
-                    )
-                })}</p>
+                <div className="w-full max-w-2xl p-3 bg-gray-300 rounded-tl-2xl rounded-br-2xl shadow-md">
+
+                    <h2 className="text-xl font-semibold mb-4">Your Shops</h2>
+
+                    <div>
+                        {profile.shops.length > 0 ? (
+                            <ul>
+                                {profile.shops.map((shop: Shop) => (
+                                    <li key={shop.name}>{shop.name} - {shop.location}</li>
+                                ))}
+                            </ul>
+                        ) : (
+                            <p>You have no shops.</p>
+                        )}
+                    </div>
+                </div>
             </div>
 
             {/* <h1 className="text-xl font-semibold mb-4">All Connections: </h1> */}
