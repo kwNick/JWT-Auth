@@ -43,7 +43,7 @@ const page = async () => {
     // console.log(roles);
 
     return (
-        <div className="p-4 flex flex-col items-start justify-center bg-white rounded-tl-2xl rounded-br-2xl shadow-md">
+        <div className="flex flex-col items-center justify-center min-h-[75vh] font-[family-name:var(--font-geist-sans)] bg-white rounded-tl-2xl rounded-br-2xl shadow-md">
             <h1 className="text-xl font-semibold mb-4">Hello, User - {profile.username} - <span className='text-xs'>{profile.roles.map(role => role.name)}</span></h1>
 
             <div>
