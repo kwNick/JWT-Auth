@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 
 export async function fetchProfile() {
     try {
-        console.log('fetchProfile!');
+        // console.log('fetchProfile!');
         const cookieStore = cookies();
         const token = (await cookieStore).get('token')?.value;
 
@@ -15,23 +15,23 @@ export async function fetchProfile() {
                 Authorization: `Bearer ${token}`,
             },
         });
-        console.log('data: ', data.status, data.ok, data.body);
+        // console.log('data: ', data.status, data.ok, data.body);
 
         if (!data.ok) {
-            console.log('access token expired! -> Sending fetch to refresh access token!');
+            // console.log('access token expired! -> Sending fetch to refresh access token!');
             // redirect('/login');
             const refreshRes = await fetch(`https://${process.env.JWT_AUTH_API_DOMAIN}/auth/refresh`, {
                 method: 'POST',
                 credentials: 'include',
             });
-            console.log('refreshRes: ', refreshRes.status, refreshRes.ok, refreshRes.body);
+            // console.log('refreshRes: ', refreshRes.status, refreshRes.ok, refreshRes.body);
             if (!refreshRes.ok) {
-                console.log("refresh token expired! -> redirect to login!"); // + refreshRes.json()
+                // console.log("refresh token expired! -> redirect to login!"); // + refreshRes.json()
                 redirect('/login');
             }
 
             if (refreshRes.ok) {
-                console.log("refresh fetch successful! -> updating cookies again!");
+                // console.log("refresh fetch successful! -> updating cookies again!");
                 const { roleToken, token }: { roleToken: string, token: string } = await refreshRes.json();
                 // console.log({ user, roleToken, token });
                 (await cookieStore).set('token', token, {
@@ -88,7 +88,7 @@ export async function fetchUsers() {
             });
 
             if (refreshRes.status === 401) {
-                console.log("refresh token expired! -> redirect to login!");
+                // console.log("refresh token expired! -> redirect to login!");
                 redirect('/login');
             }
 
@@ -214,13 +214,13 @@ export async function fetchShops() {
                 const { roleToken, token }: { roleToken: string, token: string } = await refreshRes.json();
                 (await cookieStore).set('token', token, {
                     httpOnly: true,
-                    // secure: true,
+                    secure: true,
                     path: '/',
                     maxAge: 60 * 15, // 15 minutes
                 });
                 (await cookieStore).set('roleToken', roleToken, {
                     httpOnly: true,
-                    // secure: true,
+                    secure: true,
                     path: '/',
                     maxAge: 60 * 15, // 15 minutes
                 });
@@ -273,13 +273,13 @@ export async function fetchRoles() {
                 const { roleToken, token }: { roleToken: string, token: string } = await refreshRes.json();
                 (await cookieStore).set('token', token, {
                     httpOnly: true,
-                    // secure: true,
+                    secure: true,
                     path: '/',
                     maxAge: 60 * 15, // 15 minutes
                 });
                 (await cookieStore).set('roleToken', roleToken, {
                     httpOnly: true,
-                    // secure: true,
+                    secure: true,
                     path: '/',
                     maxAge: 60 * 15, // 15 minutes
                 });
