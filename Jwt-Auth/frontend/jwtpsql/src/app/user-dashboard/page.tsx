@@ -1,5 +1,6 @@
 import DeleteButton from "@/components/DeleteButton";
-import { fetchProfile, fetchRoles, fetchShops, fetchUsers, fetchUsersWithDetails } from "@/lib/data";
+import { fetchProfile } from "@/lib/data";
+// import { fetchRoles, fetchShops, fetchUsers, fetchUsersWithDetails } from "@/lib/data";
 import Role from "@/lib/roleModel";
 import Shop from "@/lib/shopModel";
 import User from "@/lib/userModel";
