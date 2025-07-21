@@ -26,19 +26,19 @@ const page = async () => {
     const profile: User = await fetchProfile();
     // console.log(profile);
 
-    const userDetails: User[] = await fetchUsersWithDetails();
-    // console.log(userDetails);
+    // const userDetails: User[] = await fetchUsersWithDetails();
+    // // console.log(userDetails);
 
-    const res = await fetchUsers();
-    const users: User[] = res._embedded.users;
-    // console.log(users);
+    // const res = await fetchUsers();
+    // const users: User[] = res._embedded.users;
+    // // console.log(users);
 
-    const res2 = await fetchShops();
-    const shops: Shop[] = res2._embedded.shops;
-    // console.log(shops);
+    // const res2 = await fetchShops();
+    // const shops: Shop[] = res2._embedded.shops;
+    // // console.log(shops);
 
-    const res3 = await fetchRoles();
-    const roles: Role[] = res3._embedded.roles;
+    // const res3 = await fetchRoles();
+    // const roles: Role[] = res3._embedded.roles;
     // console.log(roles);
 
     return (
