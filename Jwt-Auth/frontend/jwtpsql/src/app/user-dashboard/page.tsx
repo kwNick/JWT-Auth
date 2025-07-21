@@ -75,9 +75,9 @@ const page = async () => {
                 })}</p>
             </div>
 
-            <h1 className="text-xl font-semibold mb-4">All Connections: </h1>
+            {/* <h1 className="text-xl font-semibold mb-4">All Connections: </h1> */}
             {/* <UsersList /> */}
-            <ul>
+            {/* <ul>
                 {userDetails.map((user: User) => (
                     <li key={user.username}>{user.username} - {user.email} - {user.password}  - {user.shops.map((shop) => {
                         return (
@@ -91,29 +91,29 @@ const page = async () => {
                 ))}
             </ul>
 
-            <h1 className="text-xl font-semibold mb-4">Users</h1>
+            <h1 className="text-xl font-semibold mb-4">Users</h1> */}
             {/* <UsersList /> */}
-            <ul>
+            {/* <ul>
                 {users.map((user: User) => (
                     <li key={user.username}>{user.username} - {user.email} - {user.password}  - {user._links.self.href} - {user._links.user.href} - {user._links.shops.href}- {user._links.roles.href}</li>
                 ))}
-            </ul>
+            </ul> */}
 
-            <h1 className="text-xl font-semibold mb-4">Shops</h1>
+            {/* <h1 className="text-xl font-semibold mb-4">Shops</h1> */}
             {/* <ShopsList /> */}
-            <ul>
+            {/* <ul>
                 {shops.map((shop: Shop) => (
                     <li key={shop.name}>{shop.name} - {shop.location}</li>
                 ))}
-            </ul>
+            </ul> */}
 
-            <h1 className="text-xl font-semibold mb-4">Roles</h1>
+            {/* <h1 className="text-xl font-semibold mb-4">Roles</h1> */}
             {/* <RolesList /> */}
-            <ul>
+            {/* <ul>
                 {roles.map((role: Role) => (
                     <li key={role.name}>{role.id} - {role.name}</li>
                 ))}
-            </ul>
+            </ul> */}
 
             <div>
                 <h1>

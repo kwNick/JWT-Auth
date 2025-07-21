@@ -27,7 +27,7 @@ export default function Home() {
           </p>
         </div>
 
-        <div className="h-full w-full flex flex-col gap-[8px] items-center sm:items-start justify-center">
+        {/* <div className="h-full w-full flex flex-col gap-[8px] items-center sm:items-start justify-center">
           <p className="text-[16px] sm:text-[20px] text-center sm:text-left">
             You can log in with the following <em>Admin</em> credentials:
           </p>
@@ -37,7 +37,7 @@ export default function Home() {
           <p className="text-[16px] sm:text-[20px] text-center sm:text-left">
             <strong>Password:</strong> <em>hashedpassword2</em>
           </p>
-        </div>
+        </div> */}
 
         <div className="h-full w-full flex flex-col gap-[8px] items-center sm:items-start justify-center">
           <p className="text-[16px] sm:text-[20px] text-center sm:text-left">
