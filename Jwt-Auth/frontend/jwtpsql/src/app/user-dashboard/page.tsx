@@ -4,6 +4,7 @@ import { fetchProfile } from "@/lib/data";
 import Role from "@/lib/roleModel";
 import Shop from "@/lib/shopModel";
 import User from "@/lib/userModel";
+import Link from "next/link";
 // import { cookies } from "next/headers";
 // import { jwtDecode } from "jwt-decode";
 
@@ -90,6 +91,11 @@ const page = async () => {
                         ) : (
                             <p>You have no shops.</p>
                         )}
+                    </div>
+                    <div>
+                        <Link href="/add-shop" className="text-blue-500 hover:underline">
+                            Add a new shop
+                        </Link>
                     </div>
                 </div>
             </div>

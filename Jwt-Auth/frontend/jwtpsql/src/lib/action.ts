@@ -3,6 +3,7 @@
 import { redirect } from 'next/navigation';
 import { cookies } from 'next/headers';
 import { z } from 'zod';
+import Shop from './shopModel';
 // import { revalidatePath } from 'next/cache';
 
 const LoginSchema = z.object({
@@ -234,4 +235,56 @@ export async function DeleteAction() {
         throw error;
     }
     redirect('/')
+}
+
+const AddShopSchema = z.object({
+    id: z.string(),
+    name: z.string().min(1, { message: 'Name is required' }).max(15, { message: 'Username must be 15 characters or less' }),
+    location: z.string().min(1, { message: 'Location is required' }).max(50, { message: 'Location must be 50 characters or less' }),
+});
+
+export type AddShopState = {
+    errors?: {
+        name?: string[] | null;
+        location?: string[] | null;
+    } | undefined;
+    // role?: string | null;
+    message?: string | null;
+    success?: boolean;
+};
+
+const AddShopAuth = AddShopSchema.omit({ id: true });
+export async function AddShop(prevState: AddShopState, formData: FormData) {
+    const validatedFields = AddShopAuth.safeParse({
+        name: formData.get("name"),
+        location: formData.get("location"),
+    });
+
+    // If form validation fails, return errors early.Otherwise, continue.
+    if (!validatedFields.success) {
+        return {
+            errors: validatedFields.error.flatten().fieldErrors,
+            message: 'Missing Fields. Failed to Add Shop.',
+            success: false
+        };
+    }
+
+    const { name, location }: { name: string, location: string } = validatedFields.data;
+    try {
+        const response = await fetch(`https://${process.env.JWT_AUTH_API_DOMAIN}/shops/addShop`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ name: name, location: location })
+        });
+
+        const { resName, resLocation, resUsername }: { resName: string, resLocation: string, resUsername: string } = await response.json();
+
+        return { success: true, message: 'Shop Added Successfully successfuly!\n' + ` ${resName} - ${resLocation} - ${resUsername}` };
+    } catch (error) {
+        console.error('Add Shop Failed:', error);
+        throw error;
+
+    }
 }
