@@ -3,7 +3,6 @@
 import { redirect } from 'next/navigation';
 import { cookies } from 'next/headers';
 import { z } from 'zod';
-import Shop from './shopModel';
 // import { revalidatePath } from 'next/cache';
 
 const LoginSchema = z.object({
@@ -254,7 +253,7 @@ export type AddShopState = {
 };
 
 const AddShopAuth = AddShopSchema.omit({ id: true });
-export async function AddShop(prevState: AddShopState, formData: FormData) {
+export async function AddShopAction(prevState: AddShopState, formData: FormData) {
     const validatedFields = AddShopAuth.safeParse({
         name: formData.get("name"),
         location: formData.get("location"),
@@ -271,17 +270,28 @@ export async function AddShop(prevState: AddShopState, formData: FormData) {
 
     const { name, location }: { name: string, location: string } = validatedFields.data;
     try {
+        const cookieStore = cookies();
+        const token = (await cookieStore).get('token')?.value;
+
         const response = await fetch(`https://${process.env.JWT_AUTH_API_DOMAIN}/shops/addShop`, {
             method: 'POST',
             headers: {
+                Authorization: `Bearer ${token}`,
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({ name: name, location: location })
         });
 
-        const { resName, resLocation, resUsername }: { resName: string, resLocation: string, resUsername: string } = await response.json();
+        // console.log(response.status, response.body);
 
-        return { success: true, message: 'Shop Added Successfully successfuly!\n' + ` ${resName} - ${resLocation} - ${resUsername}` };
+        if (!response.ok) {
+            throw new Error('Failed to add shop');
+        }
+
+        const { shopName, shopLocation, username }: { shopName: string, shopLocation: string, username: string } = await response.json();
+
+        return { success: true, message: 'Shop Added Successfully!\n' + ` ${shopName} - ${shopLocation} - ${username}` };
+
     } catch (error) {
         console.error('Add Shop Failed:', error);
         throw error;

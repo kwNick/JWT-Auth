@@ -93,8 +93,8 @@ const page = async () => {
                         )}
                     </div>
                     <div>
-                        <Link href="/add-shop" className="text-blue-500 hover:underline">
-                            Add a new shop
+                        <Link href="/edit-shops" className="text-blue-500 hover:underline">
+                            Edit Shops
                         </Link>
                     </div>
                 </div>
