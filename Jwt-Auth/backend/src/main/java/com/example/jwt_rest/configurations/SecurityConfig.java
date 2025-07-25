@@ -39,7 +39,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                                 .requestMatchers("/auth/**").permitAll()
                                 .requestMatchers("/api/users/**").hasRole("ADMIN") // Only ADMIN can fetch from the spring app on routes /api/users/**
-                                // .requestMatchers("/api/**").hasAnyRole("USER", "ADMIN") // Only USER or ADMIN can fetch from the spring app on routes /users/**
+                                .requestMatchers("/shops/**").hasAnyRole("USER", "ADMIN") // Only USER or ADMIN can fetch from the spring app on routes /users/**
                                 .anyRequest().authenticated()
                 )
                 // .exceptionHandling(ex -> ex.authenticationEntryPoint(unauthorizedHandler))
@@ -64,10 +64,10 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOrigins(List.of("http://localhost:3000"));
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
-        config.setAllowedHeaders(List.of("*"));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS", "PATCH"));
+        // config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
-        config.setExposedHeaders(List.of("Set-Cookie"));
+        // config.setExposedHeaders(List.of("Set-Cookie"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);

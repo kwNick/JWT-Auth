@@ -15,4 +15,7 @@ public interface ShopRepository extends JpaRepository<Shop, Long> {
 
     // Option 2: Find shops by user ID
     List<Shop> findByUserId(Long userId);
+
+    // Option 3: Find shops by user entity and shop name
+    boolean existsByUserAndName(User user, String name);
 }

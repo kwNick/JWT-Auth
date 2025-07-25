@@ -4,6 +4,8 @@ package com.example.jwt_rest.models;
 import java.util.List;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -29,6 +31,7 @@ public class User {
     private String password;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+    @JsonManagedReference
     private List<Shop> shops;
 
     @ManyToMany(fetch=FetchType.EAGER)
