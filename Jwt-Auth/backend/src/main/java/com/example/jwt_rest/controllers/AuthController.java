@@ -1,6 +1,9 @@
 package com.example.jwt_rest.controllers;
 
+import java.time.Duration;
 import java.util.Arrays;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -12,7 +15,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.web.bind.annotation.CrossOrigin;
+// import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,11 +30,14 @@ import com.example.jwt_rest.models.User;
 import com.example.jwt_rest.services.UserService;
 import com.example.jwt_rest.utilities.JwtUtil;
 
+import io.github.bucket4j.Bandwidth;
+import io.github.bucket4j.Bucket;
+import io.github.bucket4j.Bucket4j;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
+// @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -67,9 +73,26 @@ public class AuthController {
     //     return ResponseEntity.ok(new RegisterResponse(resultUser, jwt));
     // }
 
+    private final Map<String, Bucket> buckets = new ConcurrentHashMap<>();
+    @SuppressWarnings("deprecation")
+    private Bucket resolveBucket(String ip) {
+        Bandwidth limit = Bandwidth.simple(12, Duration.ofMinutes(2));
+        return buckets.computeIfAbsent(ip, k -> Bucket4j.builder()
+            .addLimit(limit)
+            .build());
+        // return buckets.computeIfAbsent(ip, k -> Bucket4j.builder()
+        //     .addLimit(Bandwidth.simple(12, Duration.ofMinutes(2)))
+        //     .build());
+    }
+
     // For access token and refresh token
     @PostMapping("/login-refresh")
-    public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request, HttpServletResponse response) {
+    public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request, HttpServletRequest request_1, HttpServletResponse response) {
+        
+        String ip = request_1.getRemoteAddr();
+        Bucket bucket = resolveBucket(ip);
+        if (bucket.tryConsume(1)) {
+
         authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
         );
@@ -111,6 +134,10 @@ public class AuthController {
         final String rolesToken = jwtUtil.generateRolesToken(resultUser.getRoles());
 
         return ResponseEntity.ok(new AuthResponse(rolesToken, accessToken));
+        } else {
+        return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).build();
+    }
+
     }
 
     // Works perfect over postman, but in production, the cookie is not being sent back to the server
@@ -143,7 +170,12 @@ public class AuthController {
     }
 
     @PostMapping("/register-refresh")
-    public ResponseEntity<RegisterResponse> register(@RequestBody RegisterRequest request, HttpServletResponse response) {
+    public ResponseEntity<RegisterResponse> register(@RequestBody RegisterRequest request, HttpServletRequest request_1, HttpServletResponse response) {
+
+            String ip = request_1.getRemoteAddr();
+            Bucket bucket = resolveBucket(ip);
+            if (bucket.tryConsume(1)) {
+
         final User user = userService.registerNewUser(request);
 
         // Generate tokens
@@ -173,6 +205,11 @@ public class AuthController {
         final String rolesToken = jwtUtil.generateRolesToken(resultUser.getRoles());
 
         return ResponseEntity.ok(new RegisterResponse(rolesToken, accessToken));
+
+        } else {
+        return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).build();
+    }
+
     }
 
     @PostMapping("/logout-refresh")
