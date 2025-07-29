@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import NavAuth from "../components/NavAuth";
+import Link from "next/link";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,10 +37,25 @@ export default function RootLayout({
           {children}
         </div>
 
-        <footer className="mx-5 w-full h-[10vh] flex items-center justify-center bg-white rounded-t-2xl shadow-md">
-          <p className="text-center text-gray-600">
-            © {new Date().getFullYear()} POS System. All rights reserved.
-          </p>
+
+        <footer className="mx-5 w-full h-[10vh] flex items-center justify-around bg-white rounded-t-2xl shadow-md">
+          <div className="">
+            <Link href="/">POS</Link>
+          </div>
+
+          <div>
+            <p className="text-center text-gray-600">
+              © {new Date().getFullYear()} POS System. All rights reserved.
+            </p>
+          </div>
+
+          <div>
+            <ul className="flex items-center gap-x-4">
+              <li><Link href="/login">Login</Link></li>
+              <li><Link href="/register">Register</Link></li>
+            </ul>
+          </div>
+
         </footer>
       </body>
     </html>
