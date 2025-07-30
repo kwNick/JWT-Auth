@@ -8,7 +8,7 @@ const page = async () => {
     const profile: User = await fetchProfile();
 
     return (
-        <div>
+        <div className="w-full min-h-[85vh] flex items-center justify-center ">
             <div className="flex justify-center items-center">
                 <h1 className="text-3xl font-bold mb-4">Shop Dashboard</h1>
             </div>

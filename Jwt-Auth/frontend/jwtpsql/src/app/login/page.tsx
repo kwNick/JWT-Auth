@@ -50,7 +50,7 @@ export default function LoginPage() {
     }, [username, password]);
 
     return (
-        <div className="pt-5 flex flex-col items-center justify-center min-h-[75vh] bg-white rounded-tl-2xl rounded-br-2xl shadow-md">
+        <div className="pt-5 flex flex-col items-center justify-center min-h-[85vh] bg-white rounded-tl-2xl rounded-br-2xl shadow-md">
             <h2 className="text-3xl font-bold">Login</h2>
             {/* < LoginForm /> */}
             <form action={formAction} className="space-y-4 w-3/5">

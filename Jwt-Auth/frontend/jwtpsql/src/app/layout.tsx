@@ -33,12 +33,12 @@ export default function RootLayout({
           <NavAuth />
         </nav>
 
-        <div className="p-8 bg-blue-400">
+        <div className="relative p-8 bg-blue-400 z-10">
           {children}
         </div>
 
 
-        <footer className="mx-5 w-full h-[10vh] flex items-center justify-around bg-white rounded-t-2xl shadow-md">
+        <footer className="mx-5 w-full h-[10vh] flex items-center justify-around bg-white rounded-t-2xl shadow-md md:sticky md:bottom-0">
           <div className="">
             <Link href="/">POS</Link>
           </div>
