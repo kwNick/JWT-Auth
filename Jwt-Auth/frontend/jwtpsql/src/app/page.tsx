@@ -1,17 +1,16 @@
 export default function Home() {
   return (
     <div className="flex flex-col items-center justify-center min-h-[85vh] font-[family-name:var(--font-geist-sans)] bg-white rounded-tl-2xl rounded-br-2xl shadow-md">
-
-      <main className="min-h-full flex flex-col gap-[32px]  items-center sm:items-start p-8">
+      <main className="w-full min-h-full flex flex-col gap-[32px] items-center sm:items-start p-16 pb-25">
 
         <div className="h-full w-full flex flex-col gap-[8px] items-center justify-center ">
-          <h1 className="text-3xl">POS System</h1>
+          <h1 className="text-3xl underline">POS System</h1>
         </div>
 
         <div className="h-full w-full flex flex-col gap-[8px] items-center sm:items-start justify-center">
           <p className="text-[16px] sm:text-[20px] text-center sm:text-left">
             This is a simple POS system built with Next.js, TypeScript, and PostgreSQL.
-            It uses JWT for authentication and is designed to be easy to use and extend.
+            It uses JWT for authentication and is designed to be easy to use and extend authentication system to any application.
           </p>
         </div>
 
@@ -42,6 +41,20 @@ export default function Home() {
         <div className="h-full w-full flex flex-col gap-[8px] items-center sm:items-start justify-center">
           <p className="text-[16px] sm:text-[20px] text-center sm:text-left">
             You can also register a new user by clicking the &quot;Register&quot; button in the navigation bar.
+          </p>
+        </div>
+        <div className="h-full w-full flex flex-col gap-[8px] items-center sm:items-start justify-center">
+          <p className="text-[16px] sm:text-[20px] text-center sm:text-left">
+            Each user has a unique JWT token that is used for authentication. U can create, read, update, and delete their own data. Each user has the User role by default, and the Admin role can be assigned to a user by an administrator.
+          </p>
+        </div>
+
+        <div className="h-full w-full flex flex-col gap-[8px] items-center sm:items-start justify-center">
+          <p className="text-[16px] sm:text-[20px] text-center sm:text-left">
+            This project is open source and available on GitHub.
+          </p>
+          <p className="text-[16px] sm:text-[20px] text-center sm:text-left">
+            Feel free to contribute and make it better!
           </p>
         </div>
 
