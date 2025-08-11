@@ -48,10 +48,17 @@ export default function RegisterPage() {
     }, [username, password, email]);
 
     return (
-        <div className="pt-5 flex flex-col items-center justify-center min-h-[85vh] bg-white rounded-tl-2xl rounded-br-2xl shadow-md">
-            <h2 className="text-3xl font-bold">Register</h2>
+        <div className="flex flex-col items-center justify-center gap-y-10 min-h-[120vh] bg-white rounded-tl-2xl rounded-br-2xl shadow-md">
+
+            <div>
+                <h2 className="text-4xl md:text-5xl lg:text-6xl xl:text-6xl font-bold underline">
+                    Register
+                </h2>
+            </div>
+
             {/* < RegisterForm /> */}
-            <form action={formAction} className="space-y-4 w-3/5">
+            <form action={formAction} className="space-y-12 w-3/5">
+
                 <label htmlFor="username">Username</label>
                 <input
                     id="username"
@@ -88,9 +95,11 @@ export default function RegisterPage() {
                     required
                 />
 
-                <button type="submit" className="bg-blue-500 text-white px-4 py-2">
-                    Register
-                </button>
+                <div className='flex items-center justify-center'>
+                    <button type="submit" className="bg-blue-500 text-white px-4 py-2  rounded-md hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed">
+                        Register
+                    </button>
+                </div>
 
                 <div id="rated-error" aria-live="polite" aria-atomic="true">
                     {state?.errors?.username &&
@@ -105,6 +114,7 @@ export default function RegisterPage() {
                             </div>
                         ))}
                 </div>
+
                 <div id="rated-error" aria-live="polite" aria-atomic="true">
                     {state?.errors?.password &&
                         state.errors.password.map((error: string) => (
@@ -119,6 +129,7 @@ export default function RegisterPage() {
 
                         ))}
                 </div>
+
                 <div id="rated-error" aria-live="polite" aria-atomic="true">
                     {state?.errors?.email &&
                         state.errors.email.map((error: string) => (
@@ -133,7 +144,11 @@ export default function RegisterPage() {
 
                         ))}
                 </div>
-                <p className={` relative opacity-0 mt-2 text-xs text-accent duration-500 ${(isPending || !isUpdated) && 'opacity-100'}`}>{formMessage}</p>
+
+                <p className={`relative opacity-0 text-xs text-center text-accent duration-500 ${(isPending || !isUpdated) && 'opacity-100'}`}>
+                    {formMessage}
+                </p>
+
             </form>
             {/* {error && <p className="text-red-500 mt-2">{error}</p>} */}
         </div>

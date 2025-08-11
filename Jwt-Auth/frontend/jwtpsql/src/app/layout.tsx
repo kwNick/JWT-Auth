@@ -33,7 +33,7 @@ export default function RootLayout({
           <NavAuth />
         </nav>
 
-        <div className="relative p-8 bg-blue-400 z-10">
+        <div className="relative p-8 py-12 bg-blue-400 z-10">
           {children}
         </div>
 

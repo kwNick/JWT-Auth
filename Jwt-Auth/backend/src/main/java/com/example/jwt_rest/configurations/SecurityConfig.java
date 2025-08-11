@@ -2,8 +2,6 @@ package com.example.jwt_rest.configurations;
 
 import java.util.List;
 
-// import org.springframework.security.authentication.AuthenticationProvider;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -41,6 +39,7 @@ public class SecurityConfig {
                                 .requestMatchers("/api/users/**").hasRole("ADMIN") // Only ADMIN can fetch from the spring app on routes /api/users/**
                                 .requestMatchers("/users/**").hasRole("ADMIN")
                                 .requestMatchers("/roles/**").hasRole("ADMIN") // Only ADMIN can fetch from the spring app on routes /api/shops/**
+                                .requestMatchers("/edit-shops/**").hasRole("ADMIN") // Only ADMIN can fetch from the spring app on routes /api/edit-shops/**
                                 .requestMatchers("/shops/**").hasAnyRole("USER", "ADMIN") // Only USER or ADMIN can fetch from the spring app on routes /users/**
                                 .anyRequest().authenticated()
                 )
