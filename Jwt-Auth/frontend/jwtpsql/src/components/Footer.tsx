@@ -15,8 +15,8 @@ const Footer = () => {
 
             <div>
                 <ul className="flex items-center gap-x-4">
-                    <li><Link href="/login">Login</Link></li>
-                    <li><Link href="/register">Register</Link></li>
+                    <li><Link href="/login" className="underline">Login</Link></li>
+                    <li><Link href="/register" className="underline">Register</Link></li>
                 </ul>
             </div>
         </>

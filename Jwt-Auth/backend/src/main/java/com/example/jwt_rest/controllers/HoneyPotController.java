@@ -44,7 +44,7 @@ public class HoneyPotController {
         
         String ip = getClientIP();
         String cmd = String.format(
-                "firewall-cmd --permanent --add-rich-rule='rule family=\"ipv4\" source address=\"%s\" reject'", ip);
+                "firewall-cmd --permanent --add-rich-rule='rule family=\"ipv4\" source address=\"%s\" reject'", ip); //rejects the ip attempting to access the admin path
         try {
             Runtime.getRuntime().exec(new String[] { "bash", "-c", cmd });
             Runtime.getRuntime().exec(new String[] { "bash", "-c", "firewall-cmd --reload" });

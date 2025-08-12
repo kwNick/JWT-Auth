@@ -29,7 +29,6 @@ public class UserService {
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
     }
-    
 
     public User registerNewUser(RegisterRequest request) throws RuntimeException {
         if (userRepo.existsByUsername(request.getUsername())) {
@@ -63,7 +62,6 @@ public class UserService {
         return userRepo.findByUsername(username)
             .orElseThrow(() -> new RuntimeException("User not found"));
     }
-
 
     //this is new ...
     // public void deleteUser(String username) {

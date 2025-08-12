@@ -32,9 +32,9 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    public List<User> getAllUsers() {
-        return userRepository.findAll().stream()
-            .collect(Collectors.toList());
+    public ResponseEntity<List<User>> getAllUsers() {
+        return ResponseEntity.ok(userRepository.findAll().stream()
+            .collect(Collectors.toList()));
     }
 
     @GetMapping("/profile")
@@ -49,7 +49,7 @@ public class UserController {
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<?> deleteUserData(HttpServletResponse response, @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<String> deleteUserData(HttpServletResponse response, @AuthenticationPrincipal UserDetails userDetails) {
         // String username = getCurrentUsername();
         Optional<User> user = userRepository.findByUsername(userDetails.getUsername());
 
