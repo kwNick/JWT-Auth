@@ -29,10 +29,10 @@ const AuthButtons = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
         <>
             {/* <LoginNavItems isLoggedIn={login} /> */}
             <div className={`${!login ? 'block' : 'hidden'} w-full h-full flex items-center justify-end gap-4`}>
-                <Link href="/login" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                <Link href="/login" className="bg-background hover:bg-accent duration-300 font-bold py-2 px-4 rounded">
                     Login
                 </Link>
-                <Link href="/register" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                <Link href="/register" className="bg-background hover:bg-accent duration-300 font-bold py-2 px-4 rounded">
                     Register
                 </Link>
             </div>

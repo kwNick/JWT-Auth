@@ -27,18 +27,19 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen `}
       >
-        <nav className="p-3 w-full h-1/5 bg-blue-400 flex items-center justify-center">
+
+        <nav className="p-3 w-full h-1/5 bg-bakground flex items-center justify-center">
           <NavAuth />
         </nav>
 
-        <div className="relative p-8 py-12 bg-blue-400 z-10">
+        <div className="relative w-full h-full p-8 py-12 flex flex-col items-center bg-primary z-10">
           {children}
         </div>
 
 
-        <footer className="w-full h-[10vh] flex items-center justify-around bg-white rounded-t-2xl shadow-md md:sticky md:bottom-0">
+        <footer className="w-full h-[10vh] flex items-center justify-around bg-secondary rounded-t-2xl shadow-md md:sticky md:bottom-0">
           <Footer />
         </footer>
       </body>
