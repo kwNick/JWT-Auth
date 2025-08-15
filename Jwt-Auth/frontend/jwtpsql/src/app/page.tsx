@@ -1,6 +1,6 @@
 export default function Home() {
   return (
-    <div className="p-10 flex flex-col items-center justify-center w-4/5 min-h-[120vh] font-[family-name:var(--font-geist-sans)] bg-foreground rounded-tl-2xl rounded-br-2xl shadow-md">
+    <div className="p-10 flex flex-col items-center justify-center w-4/5 min-h-[120vh] font-[family-name:var(--font-geist-sans)] bg-primary rounded-tl-2xl rounded-br-2xl shadow-md">
       <main className="w-full min-h-full flex flex-col gap-y-14 items-center sm:items-start pb-5 ">
 
         <div className="h-full w-full flex flex-col items-center justify-center ">

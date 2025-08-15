@@ -24,10 +24,10 @@ const AdminButton = ({ role, isLoggedIn }: { role: boolean, isLoggedIn: boolean 
 
     return (
         <>
-            <Link href={'/admin-dashboard'} className={`${role ? 'block' : 'hidden'} bg-background hover:bg-accent duration-300 font-bold py-2 px-4 rounded`}>
+            <Link href={'/admin-dashboard'} className={`${role ? 'block' : 'hidden'} bg-secondary hover:bg-accent duration-300 font-bold py-2 px-4 rounded`}>
                 Admin
             </Link>
-            <Link href={'/user-dashboard'} className={`${isLoggedIn ? 'block' : 'hidden'} bg-background hover:bg-accent duration-300 font-bold py-2 px-4 rounded`}>
+            <Link href={'/user-dashboard'} className={`${isLoggedIn ? 'block' : 'hidden'} bg-secondary hover:bg-accent duration-300 font-bold py-2 px-4 rounded`}>
                 Dashboard
             </Link>
 
@@ -36,7 +36,7 @@ const AdminButton = ({ role, isLoggedIn }: { role: boolean, isLoggedIn: boolean 
                 <button
                     onClick={handleSignout2}
                     disabled={isPending}
-                    className={`${login ? 'block' : 'hidden'} bg-background hover:bg-accent   font-bold py-2 px-4 rounded`}>
+                    className={`${login ? 'block' : 'hidden'} bg-secondary hover:bg-accent   font-bold py-2 px-4 rounded`}>
                     {isPending ? 'Logging Out...' : 'Logout'}
                 </button>
             </div>
