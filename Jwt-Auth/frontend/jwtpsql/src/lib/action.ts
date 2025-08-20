@@ -5,6 +5,7 @@ import { cookies } from 'next/headers';
 import { z } from 'zod';
 // import { revalidatePath } from 'next/cache';
 
+/* Authentication Mutations ----------------------- */
 const LoginSchema = z.object({
     id: z.string(),
     username: z.string().min(1, { message: 'Username is required' }).max(15, { message: 'Username must be 15 characters or less' }),
@@ -45,7 +46,8 @@ export async function LoginAction(prevState: State, formData: FormData) {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ username: username, password: password })
+            body: JSON.stringify({ username: username, password: password }),
+            credentials: "include", // if you’re dealing with cookies/sessions
         });
 
         const cookieStore = cookies();  //for server-side cookies use cookies from next/headers
@@ -58,10 +60,8 @@ export async function LoginAction(prevState: State, formData: FormData) {
             secure: true,
             path: '/',
             maxAge: 15 * 60, // 15 minutes
-        }); // store token in cookie
-        // maxAge is in seconds.
-        // Setting maxAge will cause the cookie to become a persistent cookie with an explicit expiration.
-        // If maxAge is not set, the cookie is a session cookie (cleared when browser is closed).
+        }); // store token in cookie. MaxAge is in seconds.
+        // Setting maxAge will cause the cookie to become a persistent cookie with an explicit expiration. If maxAge is not set, the cookie is a session cookie (cleared when browser is closed).
         // Setting maxAge: 0 will delete the cookie.
 
         // console.log((await cookieStore).get('token')?.value);
@@ -131,7 +131,8 @@ export async function RegisterAction(prevState: State, formData: FormData) {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ username: username, email: email, password: password })
+            body: JSON.stringify({ username: username, email: email, password: password }),
+            credentials: "include", // if you’re dealing with cookies/sessions
         });
 
         const cookieStore = cookies();  //for server-side cookies use cookies from next/headers
@@ -236,6 +237,7 @@ export async function DeleteAction() {
     redirect('/')
 }
 
+/* Shop Mutations ----------------------- */
 const AddShopSchema = z.object({
     id: z.string(),
     name: z.string().min(1, { message: 'Name is required' }).max(15, { message: 'Username must be 15 characters or less' }),
@@ -279,7 +281,8 @@ export async function AddShopAction(prevState: AddShopState, formData: FormData)
                 Authorization: `Bearer ${token}`,
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ name: name, location: location })
+            body: JSON.stringify({ name: name, location: location }),
+            credentials: "include"
         });
 
         // console.log(response.status, response.body);
