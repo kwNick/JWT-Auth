@@ -33,7 +33,7 @@ export async function POST(req: Request) {
 
     // 🔹 Call your Spring Boot backend
     const response = await fetch(
-      `http://${process.env.JWT_AUTH_API_DOMAIN}/auth/register-refresh`,
+      `https://${process.env.JWT_AUTH_API_DOMAIN}/auth/register-refresh`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

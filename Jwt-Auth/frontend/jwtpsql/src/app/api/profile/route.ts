@@ -8,7 +8,7 @@ export async function GET() {
     let token = cookieStore.get("token")?.value;
 
     // First attempt: call profile API
-    let res = await fetch(`http://${process.env.JWT_AUTH_API_DOMAIN}/api/profile`, {
+    let res = await fetch(`https://${process.env.JWT_AUTH_API_DOMAIN}/api/profile`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -16,7 +16,7 @@ export async function GET() {
 
     // If access token expired, try refresh
     if (!res.ok) {
-      const refreshRes = await fetch(`http://${process.env.JWT_AUTH_API_DOMAIN}/auth/refresh`, {
+      const refreshRes = await fetch(`https://${process.env.JWT_AUTH_API_DOMAIN}/auth/refresh`, {
         method: "POST",
         credentials: "include",
         headers: {
