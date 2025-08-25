@@ -84,13 +84,13 @@ public class AuthController {
             final User resultUser = userService.findByUsername(request.getUsername());
 
             // final Cookie refreshCookie = new Cookie("refreshToken", refreshToken);
-                // refreshCookie.setHttpOnly(true);
-                // refreshCookie.setPath("/");
-                // refreshCookie.setSecure(false);
-                // refreshCookie.setDomain("localhost");
-                // refreshCookie.setMaxAge(1 * 1 * 60 * 30); // 30 minutes
-                // refreshCookie.setSameSite("None"); //doesnt support SameSite attribute in Java 8
-                // response.addCookie(refreshCookie); // adds cookie to the response but does not support SameSite attribute
+            //     refreshCookie.setHttpOnly(true);
+            //     refreshCookie.setPath("/");
+            //     refreshCookie.setSecure(false);
+            //     refreshCookie.setDomain("localhost");
+            //     refreshCookie.setMaxAge(1 * 1 * 60 * 30); // 30 minutes
+            //     refreshCookie.setSameSite("None"); //doesnt support SameSite attribute in Java 8
+            //     response.addCookie(refreshCookie); // adds cookie to the response but does not support SameSite attribute
             
             // Manually add SameSite attribute
             // response.setHeader("Set-Cookie", String.format("%s=%s; Path=/; HttpOnly; MaxAge=3600; SameSite=None; Secure=false", refreshCookie.getName(), refreshCookie.getValue()));
@@ -105,7 +105,7 @@ public class AuthController {
                 .httpOnly(true)
                 .secure(true) // Secure = false in dev, true in prod with HTTPS
                 .path("/")
-                .maxAge(3600)
+                .maxAge(1 * 1 * 60 * 30)
                 .sameSite("None") // Allows cross-site cookies; for dev, set to "Lax" or "Strict" if needed
                 .build();
             response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
@@ -123,6 +123,9 @@ public class AuthController {
     // Works perfect over postman, but in production, the cookie is not being sent back to the server
     // when the client makes a request to the server, so the refresh token is not being validated.
     // Needs both the api and the frontend to have https configured properly.
+    
+    //Try this ---
+    // public ResponseEntity<String> getProfile(@CookieValue(value = "refreshToken", required = false) String refreshToken) {
     @PostMapping("/refresh")
     public ResponseEntity<RefreshResponse> refreshToken(HttpServletRequest request, HttpServletResponse response) {
         final String refreshToken = Optional.ofNullable(request.getCookies())   //Optional.ofNullable(cookies) wraps cookies, even if it’s null.
@@ -172,22 +175,22 @@ public class AuthController {
 
             final User resultUser = userService.findByUsername(request.getUsername());
 
-            final Cookie refreshCookie = new Cookie("refreshToken", refreshToken);
-                refreshCookie.setHttpOnly(true);
-                refreshCookie.setSecure(true); // Set to true if using HTTPS
-                refreshCookie.setPath("/");
-                refreshCookie.setMaxAge(1 * 1 * 60 * 60); // 1 hour
-                response.addCookie(refreshCookie);
+            // final Cookie refreshCookie = new Cookie("refreshToken", refreshToken);
+            //     refreshCookie.setHttpOnly(true);
+            //     refreshCookie.setSecure(true); // Set to true if using HTTPS
+            //     refreshCookie.setPath("/");
+            //     refreshCookie.setMaxAge(1 * 1 * 60 * 60); // 1 hour
+            //     response.addCookie(refreshCookie);
 
             // Set refresh token in cookie //using ResponseCookie
-            // ResponseCookie refreshCookie = ResponseCookie.from("refreshToken", refreshToken)
-            //     .httpOnly(true)
-            //     .secure(true)
-            //     .path("/")
-            //     .maxAge(5 * 24 * 60 * 60)
-            //     .build();
+            ResponseCookie refreshCookie = ResponseCookie.from("refreshToken", refreshToken)
+                .httpOnly(true)
+                .secure(true)
+                .path("/")
+                .maxAge(5 * 24 * 60 * 60)
+                .build();
 
-            // response.addHeader(HttpHeaders.SET_COOKIE, refreshCookie.toString());
+            response.addHeader(HttpHeaders.SET_COOKIE, refreshCookie.toString());
 
             // final String roles = resultUser.getRoles();
             final String rolesToken = jwtUtil.generateRolesToken(resultUser.getRoles());
@@ -202,6 +205,7 @@ public class AuthController {
     @PostMapping("/logout-refresh")
     public ResponseEntity<String> logout(HttpServletResponse response) {
         // Invalidate the refresh token cookie
+        // Use ResponseCookie here instead of Cookie
         final Cookie deleteRefreshCookie = new Cookie("refreshToken", "");
             deleteRefreshCookie.setHttpOnly(true);
             deleteRefreshCookie.setSecure(true);
