@@ -57,14 +57,14 @@ export async function POST(req: Request) {
 
     res.cookies.set("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: true,
       path: "/",
       maxAge: 60 * 15, // 15 minutes
     });
 
     res.cookies.set("roleToken", roleToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: true,
       path: "/",
       maxAge: 60 * 15, // 15 minutes
     });
