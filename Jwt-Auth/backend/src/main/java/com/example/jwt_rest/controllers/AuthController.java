@@ -1,11 +1,8 @@
 package com.example.jwt_rest.controllers;
 
 import java.time.Duration;
-import java.util.Arrays;
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -17,6 +14,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -122,21 +120,23 @@ public class AuthController {
 
     // Works perfect over postman, but in production, the cookie is not being sent back to the server
     // when the client makes a request to the server, so the refresh token is not being validated.
-    // Needs both the api and the frontend to have https configured properly.
     
     //Try this ---
     // public ResponseEntity<String> getProfile(@CookieValue(value = "refreshToken", required = false) String refreshToken) {
     @PostMapping("/refresh")
-    public ResponseEntity<RefreshResponse> refreshToken(HttpServletRequest request, HttpServletResponse response) {
-        final String refreshToken = Optional.ofNullable(request.getCookies())   //Optional.ofNullable(cookies) wraps cookies, even if it’s null.
-            .map(Arrays::stream)    //If cookies is not null, .map(Arrays::stream) turns it to a stream.
-            .orElseGet(Stream::empty) //If cookies is null, return an empty stream to avoid null pointer exception
-            .filter(c -> c.getName().equals("refreshToken"))
-            .findFirst()
-            .map(Cookie::getValue)
-            .orElse(null); 
+    public ResponseEntity<RefreshResponse> refreshToken(@CookieValue(value="refreshToken", required=false) String refreshToken, HttpServletRequest request, HttpServletResponse response) {
 
-    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
+        //Manual cookie grab
+        // final String refreshToken = Optional.ofNullable(request.getCookies())   //Optional.ofNullable(cookies) wraps cookies, even if it’s null.
+        //     .map(Arrays::stream)    //If cookies is not null, .map(Arrays::stream) turns it to a stream.
+        //     .orElseGet(Stream::empty) //If cookies is null, return an empty stream to avoid null pointer exception
+        //     .filter(c -> c.getName().equals("refreshToken"))
+        //     .findFirst()
+        //     .map(Cookie::getValue)
+        //     .orElse(null); 
+
+        //Manually
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
         // final Cookie[] cookies = request.getCookies();
         // // System.out.println("Cookies: " + Arrays.toString(cookies));
         
