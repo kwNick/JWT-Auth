@@ -59,14 +59,14 @@ export async function POST(req: Request) {
       httpOnly: true,
       secure: true,
       path: "/",
-      maxAge: 60 * 15, // 15 minutes
+      maxAge: 60 * 3, // 15 minutes
     });
 
     res.cookies.set("roleToken", roleToken, {
       httpOnly: true,
       secure: true,
       path: "/",
-      maxAge: 60 * 15, // 15 minutes
+      maxAge: 60 * 3, // 15 minutes
     });
 
     return res;

@@ -59,7 +59,7 @@ export async function LoginAction(prevState: State, formData: FormData) {
             httpOnly: true,
             secure: true,
             path: '/',
-            maxAge: 15 * 60, // 15 minutes
+            maxAge: 60 * 3, // 15 minutes
         }); // store token in cookie. MaxAge is in seconds.
         // Setting maxAge will cause the cookie to become a persistent cookie with an explicit expiration. If maxAge is not set, the cookie is a session cookie (cleared when browser is closed).
         // Setting maxAge: 0 will delete the cookie.
@@ -70,7 +70,7 @@ export async function LoginAction(prevState: State, formData: FormData) {
             httpOnly: true,
             secure: true,
             path: '/',
-            maxAge: 60 * 15, // 15 minutes
+            maxAge: 60 * 3, // 15 minutes
         });
 
         // const role = user.roles.find(x => x.name === 'ROLE_ADMIN') ? 'ROLE_ADMIN' : 'ROLE_USER';

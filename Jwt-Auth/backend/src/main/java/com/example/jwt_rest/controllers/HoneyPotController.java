@@ -159,4 +159,51 @@ public class HoneyPotController {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Nope!");
     }
 
+    @GetMapping("/")
+    public ResponseEntity<String> trapRootGet() {
+
+        log.warn("HONEYPOT: Attempted access to / GET from IP {}", getClientIP());
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Nope!");
+    }
+
+    @PostMapping("/")
+    public ResponseEntity<String> trapRootPost() {
+
+        log.warn("HONEYPOT: Attempted access to / POST from IP {}", getClientIP());
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Nope!");
+    }
+
+    @GetMapping("/favicon.ico")
+    public ResponseEntity<String> trapFaviconGet() {
+
+        log.warn("HONEYPOT: Attempted access to /favicon.ico GET from IP {}", getClientIP());
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Nope!");
+    }
+
+    @PostMapping("/favicon.ico")
+    public ResponseEntity<String> trapFaviconPost() {
+
+        log.warn("HONEYPOT: Attempted access to /favicon.ico POST from IP {}", getClientIP());
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Nope!");
+    }
+
+    @GetMapping("/error")
+    public ResponseEntity<String> trapErrorGet() {
+
+        log.warn("HONEYPOT: Attempted access to /error GET from IP {}", getClientIP());
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Nope!");
+    }
+
+    @PostMapping("/error")
+    public ResponseEntity<String> trapErrorPost() {
+
+        log.warn("HONEYPOT: Attempted access to /error POST from IP {}", getClientIP());
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Nope!");
+    }
 }

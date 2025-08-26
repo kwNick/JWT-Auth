@@ -45,7 +45,7 @@ export default function RegisterPage() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[100vh] bg-gray-50">
-      <h2 className="text-3xl font-bold mb-6">Register</h2>
+      <h2 className="text-3xl font-bold mb-6">RegisterAPI</h2>
 
       <form onSubmit={handleSubmit} className="space-y-4 w-80">
         <input

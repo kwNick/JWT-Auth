@@ -105,7 +105,7 @@ public class AuthController {
                 .httpOnly(true)
                 .secure(true) // Secure = false in dev, true in prod with HTTPS
                 .path("/")
-                .maxAge(1 * 1 * 60 * 30)
+                .maxAge(1 * 1 * 60 * 60)
                 .sameSite("None") // Allows cross-site cookies; for dev, set to "Lax" or "Strict" if needed
                 .build();
             response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
@@ -187,7 +187,7 @@ public class AuthController {
                 .httpOnly(true)
                 .secure(true)
                 .path("/")
-                .maxAge(5 * 24 * 60 * 60)
+                .maxAge(1 * 1 * 60 * 60) //1 hour (old value: 5 days)
                 .build();
 
             response.addHeader(HttpHeaders.SET_COOKIE, refreshCookie.toString());

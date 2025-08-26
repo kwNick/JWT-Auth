@@ -8,18 +8,18 @@ import { LogoutAction } from "@/lib/action";
 
 const AuthButtons = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
     const [login, setLogin] = useState(isLoggedIn);
-    // const [isPending, startTransition] = useTransition();
+    const [isPending, startTransition] = useTransition();
 
-    // // const router = useRouter();
+    // const router = useRouter();
 
-    // const handleSignout2 = async () => { //maybe put this in a server action file
-    //     startTransition(() => {
-    //         LogoutAction();
-    //     });
-    //     // router.replace('/');
-    //     // router.refresh(); // Trigger a soft page reload after logout; If you don't want to use context
+    const handleSignout2 = async () => {
+        startTransition(() => {
+            LogoutAction();
+        });
+        // router.replace('/');
+        // router.refresh(); // Trigger a soft page reload after logout; If you don't want to use context
 
-    // };
+    };
 
     useEffect(() => {
         setLogin(isLoggedIn);
@@ -44,12 +44,14 @@ const AuthButtons = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
             </div>
 
             {/* <SignoutButton isLoggedIn={login} handleSignout={handleSignout} /> */}
-            {/* <button
-                onClick={handleSignout2}
-                disabled={isPending}
-                className={`${login ? 'block' : 'hidden'} bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded`}>
-                {isPending ? 'Logging Out...' : 'Logout'}
-            </button> */}
+            <div>
+                <button
+                    onClick={handleSignout2}
+                    disabled={isPending}
+                    className={`${login ? 'block' : 'hidden'} bg-secondary hover:bg-accent   font-bold py-2 px-4 rounded`}>
+                    {isPending ? 'Logging Out...' : 'Logout'}
+                </button>
+            </div>
         </>
     )
 }
