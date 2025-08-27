@@ -14,6 +14,7 @@ export async function fetchProfile() {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
+            credentials: 'include',
         });
         // console.log('data: ', data.status, data.ok, data.body);
 
@@ -23,6 +24,9 @@ export async function fetchProfile() {
             const refreshRes = await fetch(`https://${process.env.JWT_AUTH_API_DOMAIN}/auth/refresh`, {
                 method: 'POST',
                 credentials: 'include',
+                // headers: {
+                //     Authorization: `Bearer ${token}`,
+                // },
             });
             // console.log('refreshRes: ', refreshRes.status, refreshRes.ok, refreshRes.body);
             if (!refreshRes.ok) {
@@ -51,6 +55,7 @@ export async function fetchProfile() {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
+                    credentials: 'include',
                 });
             }
         }
@@ -78,6 +83,7 @@ export async function fetchUsers() {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
+            credentials: 'include',
         });
 
         if (data.status === 403) {
@@ -111,6 +117,7 @@ export async function fetchUsers() {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
+                    credentials: 'include',
                 });
             }
         }
@@ -137,6 +144,7 @@ export async function fetchUsersWithDetails() {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
+            credentials: 'include',
         });
 
         if (data.status === 401) {
@@ -170,6 +178,7 @@ export async function fetchUsersWithDetails() {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
+                    credentials: 'include',
                 });
             }
         }
@@ -196,6 +205,7 @@ export async function fetchShops() {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
+            credentials: 'include',
         });
 
         if (data.status === 401) {
@@ -229,6 +239,7 @@ export async function fetchShops() {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
+                    credentials: 'include',
                 });
             }
         }
@@ -255,6 +266,7 @@ export async function fetchRoles() {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
+            credentials: 'include',
         });
 
         if (data.status === 401) {
@@ -288,6 +300,7 @@ export async function fetchRoles() {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
+                    credentials: 'include',
                 });
             }
         }

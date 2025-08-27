@@ -10,6 +10,13 @@ import Link from "next/link";
 
 // import jwt from "jsonwebtoken"; // if you want to decode the JWT token
 
+
+// That’s why your /refresh route can’t see the refreshToken:
+// The refresh cookie is httpOnly and scoped to the browser.
+// When you call from a server component, Next.js runs that request from Vercel’s server, which doesn’t have the browser’s cookies.
+// So Spring Boot never receives the refreshToken → you get null.
+// ✅ Fix: Move /auth/refresh and fetchProfile to the client side
+
 const page = async () => {
     // const cookieStore = cookies();  //for server-side cookies use cookies from next/headers
 

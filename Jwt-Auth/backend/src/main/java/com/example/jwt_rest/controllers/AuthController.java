@@ -32,7 +32,6 @@ import com.example.jwt_rest.utilities.JwtUtil;
 import io.github.bucket4j.Bandwidth;
 import io.github.bucket4j.Bucket;
 import io.github.bucket4j.Bucket4j;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -54,6 +53,7 @@ public class AuthController {
     private UserService userService;
 
     private final Map<String, Bucket> buckets = new ConcurrentHashMap<>();
+
     @SuppressWarnings("deprecation")
     private Bucket resolveBucket(String ip) {           //For rate limiting ips from making too many requests
         Bandwidth limit = Bandwidth.simple(12, Duration.ofMinutes(2));
@@ -99,14 +99,23 @@ public class AuthController {
             // );
             // response.setHeader("Set-Cookie", cookie); //what is the difference between setheader and addheader?
 
-            ResponseCookie cookie = ResponseCookie.from("refreshToken", refreshToken)
+            ResponseCookie cookie = ResponseCookie.from("refreshToken", refreshToken) //Spring’s ResponseCookie *newer, Recommended way in modern spring apps
                 .httpOnly(true)
                 .secure(true) // Secure = false in dev, true in prod with HTTPS
                 .path("/")
                 .maxAge(1 * 1 * 60 * 60)
                 .sameSite("None") // Allows cross-site cookies; for dev, set to "Lax" or "Strict" if needed
+                // .domain("jwt-auth.duckdns.org") // optional, but makes it explicit
                 .build();
             response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
+            // When you call cookie.toString(), Spring generates a properly formatted Set-Cookie header
+
+            // Cookie cookie = new Cookie("refreshToken", refreshToken);
+            // cookie.setHttpOnly(true);
+            // cookie.setSecure(true);
+            // cookie.setPath("/");
+            // cookie.setMaxAge(60 * 60);
+            // response.addCookie(cookie); //No SameSite, because javax.servlet.http.Cookie doesn’t support it
 
             // final String roles = resultUser.getRoles();
             final String rolesToken = jwtUtil.generateRolesToken(resultUser.getRoles());
@@ -121,6 +130,10 @@ public class AuthController {
     // Works perfect over postman, but in production, the cookie is not being sent back to the server
     // when the client makes a request to the server, so the refresh token is not being validated.
     
+    //     Why your refresh fails today
+    // Because you’re calling /refresh from a server environment (Next.js RSC / server action) where the browser’s cookies don’t exist.
+    // The backend is correct: refreshToken is null.
+
     //Try this ---
     // public ResponseEntity<String> getProfile(@CookieValue(value = "refreshToken", required = false) String refreshToken) {
     @PostMapping("/refresh")
@@ -188,6 +201,7 @@ public class AuthController {
                 .secure(true)
                 .path("/")
                 .maxAge(1 * 1 * 60 * 60) //1 hour (old value: 5 days)
+                .sameSite("None")
                 .build();
 
             response.addHeader(HttpHeaders.SET_COOKIE, refreshCookie.toString());
@@ -206,12 +220,22 @@ public class AuthController {
     public ResponseEntity<String> logout(HttpServletResponse response) {
         // Invalidate the refresh token cookie
         // Use ResponseCookie here instead of Cookie
-        final Cookie deleteRefreshCookie = new Cookie("refreshToken", "");
-            deleteRefreshCookie.setHttpOnly(true);
-            deleteRefreshCookie.setSecure(true);
-            deleteRefreshCookie.setPath("/");
-            deleteRefreshCookie.setMaxAge(0);// <--- deletes the cookie
-            response.addCookie(deleteRefreshCookie);
+        // final Cookie deleteRefreshCookie = new Cookie("refreshToken", "");
+        //     deleteRefreshCookie.setHttpOnly(true);
+        //     deleteRefreshCookie.setSecure(true);
+        //     deleteRefreshCookie.setPath("/");
+        //     deleteRefreshCookie.setMaxAge(0);// <--- deletes the cookie
+        //     response.addCookie(deleteRefreshCookie);
+
+        ResponseCookie cookie = ResponseCookie.from("refreshToken", "")
+            .httpOnly(true)
+            .secure(true) // same as when you set it
+            .path("/")    // must match
+            .maxAge(0)    // expire immediately
+            .sameSite("None") // must match
+            .build();
+
+        response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
 
         SecurityContextHolder.clearContext();
 

@@ -15,6 +15,7 @@ const AuthButtons = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
     const handleSignout2 = async () => {
         startTransition(() => {
             LogoutAction();
+            //await fetch("/api/logout", { method: "POST" }); // for api route handler
         });
         // router.replace('/');
         // router.refresh(); // Trigger a soft page reload after logout; If you don't want to use context
