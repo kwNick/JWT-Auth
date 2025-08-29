@@ -36,6 +36,9 @@ const AuthButtons = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
                 <Link href="/login-api" className="bg-secondary hover:bg-accent duration-300 font-bold py-2 px-4 rounded">
                     LoginAPI
                 </Link>
+                <Link href="/login-client" className="bg-secondary hover:bg-accent duration-300 font-bold py-2 px-4 rounded">
+                    LoginClient
+                </Link>
                 <Link href="/register" className="bg-secondary hover:bg-accent duration-300 font-bold py-2 px-4 rounded">
                     Register
                 </Link>
