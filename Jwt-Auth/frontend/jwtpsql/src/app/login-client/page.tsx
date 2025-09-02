@@ -55,7 +55,7 @@ export default function LoginPage() {
 
       <div>
         <h2 className="text-4xl md:text-5xl lg:text-6xl xl:text-6xl font-semibold underline">
-          Login
+          Login-Client
         </h2>
       </div>
 

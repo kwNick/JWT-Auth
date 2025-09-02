@@ -1,5 +1,6 @@
 "use client";
 
+import { jwtVerify } from "jose";
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 
 type Role = { name: string };
@@ -14,7 +15,7 @@ export type User = {
 
 type AuthContextType = {
   token: string | null;
-  roleToken: string | null;
+  roleToken: string[] | null;
   user: User | null;
   loading: boolean;
   login: (username: string, password: string) => Promise<boolean>;
@@ -28,7 +29,7 @@ const API_URL = process.env.NEXT_PUBLIC_JWT_AUTH_API_DOMAIN;
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [token, setToken] = useState<string | null>(null);
-  const [roleToken, setRoleToken] = useState<string | null>(null);
+  const [roleToken, setRoleToken] = useState<string[] | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -36,12 +37,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const fetchProfile = async (): Promise<User | null> => {
     if (!API_URL) return null;
     
-    console.log("token: "+token);
+    console.log("Beginning of FetchProfile - token: " + token);
     try {
       let res = await fetch(`http://${API_URL}/api/profile`, {
         credentials: "include", // sends HttpOnly refresh token
         headers: token ? { Authorization: `Bearer ${token}` } : undefined,
       });
+
+      console.log("Profile fetch response status: " + res.status);
 
       // If token expired, refresh
       if (res.status == 403) {
@@ -50,14 +53,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           credentials: "include", // refreshToken cookie
         });
 
+        console.log("Refresh fetch response status: " + refreshRes.status);
+        
         if (!refreshRes.ok) {
+          console.log("Logging out due to failed refresh!");
           logout();
           return null;
         }
 
         const data = await refreshRes.json();
         setToken(data.token);
-        setRoleToken(data.roleToken);
+        // setRoleToken(data.roleToken);
+        const { payload }: { payload: { roles: string[] } } = await jwtVerify(data.roleToken, new TextEncoder().encode("secret-key-making-it-very-strong"));
+        // console.log("payload.roles: ", payload.roles);
+        setRoleToken(payload.roles);
 
         // Retry profile fetch with new token
         res = await fetch(`http://${API_URL}/api/profile`, {
@@ -66,13 +75,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         });
       }
 
-      if (!res.ok) throw new Error("Failed to fetch profile");
+      if (!res.ok) throw new Error("Failed to fetch profile again after refresh.");
 
       const profileData: User = await res.json();
       setUser(profileData);
       return profileData;
     } catch (err) {
-      console.error("Failed to fetch Login: "+err);
+      console.error("Failed to fetch Profile: "+err);
       logout();
       return null;
     }
@@ -93,15 +102,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const data = await res.json();
       // console.log("data"+ JSON.stringify(data));
 
+      const { payload }: { payload: { roles: string[] } } = await jwtVerify(data.roleToken, new TextEncoder().encode("secret-key-making-it-very-strong"));
+      // console.log("payload.roles: ", payload.roles);
+      setRoleToken(payload.roles);
+
       setToken(data.token);
-      setRoleToken(data.roleToken);
-      console.log("token: "+token);
+      // setRoleToken(data.roleToken);
+
       await fetchProfile();
       return true;
     } catch (err) {
       console.error("Failed to fetch Login: "+err);
       return false;
     }
+    
   };
 
   // logout function
@@ -109,16 +123,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setToken(null);
     setRoleToken(null);
     setUser(null);
+    // setLoading(true);
     // optionally call backend /auth/logout to clear refreshToken
     try {
-        const res = await fetch(`http://${API_URL}/auth/logout-refresh`, {
+        await fetch(`http://${API_URL}/auth/logout-refresh`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         credentials: "include", // sets HttpOnly refresh token
       });
     } catch (error) {
-        console.error("Failed to fetch logout: "+error);
+        console.error("Logout Request Failed: "+error);
     }
+    // setLoading(false);
   };
 
   // On mount, attempt to refresh access token automatically
