@@ -39,7 +39,7 @@ export default function LoginPage() {
     setError(null);
 
     const success = await login(username, password);
-    // const success = await 
+    console.log("success: " + success);
 
     setIsPending(false);
 

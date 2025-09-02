@@ -65,9 +65,10 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("https://jwt-auth-olive.vercel.app"));
+        // config.setAllowedOrigins(List.of("https://jwt-auth-olive.vercel.app"));
+        config.setAllowedOrigins(List.of("http://localhost:3000"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS", "PATCH"));
-        // config.setAllowedHeaders(List.of("*"));
+        config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
         // config.setExposedHeaders(List.of("Set-Cookie"));
 

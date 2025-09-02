@@ -5,7 +5,7 @@ import Link from "next/link";
 import DeleteButton from "@/components/DeleteButton";
 
 export default function ProfilePage() {
-  const { user, loading, fetchProfile } = useAuth();
+  const { user, loading } = useAuth();
 
   if (loading) return <p>Loading...</p>;
   if (!user) return <p>You are not logged in.</p>;

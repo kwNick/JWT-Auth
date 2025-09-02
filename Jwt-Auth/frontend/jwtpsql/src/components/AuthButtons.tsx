@@ -1,23 +1,26 @@
 'use client';
 import Link from "next/link"
 import { useEffect, useState, useTransition } from "react";
-// import { useRouter } from "next/navigation";
-import { LogoutAction } from "@/lib/action";
+import { useRouter } from "next/navigation";
+// import { LogoutAction } from "@/lib/action";
+import { useAuth } from "@/context/AuthContext";
 // import SignoutButton from "./SignoutButton";
 // import LoginNavItems from "./LoginNavItems";
 
 const AuthButtons = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
     const [login, setLogin] = useState(isLoggedIn);
     const [isPending, startTransition] = useTransition();
+    const { logout } = useAuth();
 
-    // const router = useRouter();
+    const router = useRouter();
 
     const handleSignout2 = async () => {
         startTransition(() => {
-            LogoutAction();
-            //await fetch("/api/logout", { method: "POST" }); // for api route handler
+            logout();
+            // LogoutAction();
+
         });
-        // router.replace('/');
+        router.replace('/');
         // router.refresh(); // Trigger a soft page reload after logout; If you don't want to use context
 
     };
@@ -52,7 +55,9 @@ const AuthButtons = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
                 <button
                     onClick={handleSignout2}
                     disabled={isPending}
-                    className={`${login ? 'block' : 'hidden'} bg-secondary hover:bg-accent   font-bold py-2 px-4 rounded`}>
+                    // className={`${login ? 'block' : 'hidden'} bg-secondary hover:bg-accent   font-bold py-2 px-4 rounded`}>
+                    // {isPending ? 'Logging Out...' : 'Logout'}
+                    className={` bg-secondary hover:bg-accent   font-bold py-2 px-4 rounded`}>
                     {isPending ? 'Logging Out...' : 'Logout'}
                 </button>
             </div>

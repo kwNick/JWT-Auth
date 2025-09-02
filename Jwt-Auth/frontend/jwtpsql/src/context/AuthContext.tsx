@@ -31,21 +31,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [roleToken, setRoleToken] = useState<string | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  console.log(API_URL);
 
   // Fetch profile from backend, refresh access token if needed
   const fetchProfile = async (): Promise<User | null> => {
     if (!API_URL) return null;
-
+    
+    console.log("token: "+token);
     try {
-      let res = await fetch(`https://${API_URL}/api/profile`, {
+      let res = await fetch(`http://${API_URL}/api/profile`, {
         credentials: "include", // sends HttpOnly refresh token
         headers: token ? { Authorization: `Bearer ${token}` } : undefined,
       });
 
       // If token expired, refresh
-      if (res.status === 401) {
-        const refreshRes = await fetch(`https://${API_URL}/auth/refresh`, {
+      if (res.status == 403) {
+        const refreshRes = await fetch(`http://${API_URL}/auth/refresh`, {
           method: "POST",
           credentials: "include", // refreshToken cookie
         });
@@ -60,7 +60,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setRoleToken(data.roleToken);
 
         // Retry profile fetch with new token
-        res = await fetch(`https://${API_URL}/api/profile`, {
+        res = await fetch(`http://${API_URL}/api/profile`, {
           credentials: "include",
           headers: { Authorization: `Bearer ${data.token}` },
         });
@@ -81,7 +81,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   // Login function
   const login = async (username: string, password: string): Promise<boolean> => {
     try {
-      const res = await fetch(`https://${API_URL}/auth/login-refresh`, {
+      const res = await fetch(`http://${API_URL}/auth/login-refresh`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
@@ -91,10 +91,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       if (!res.ok) return false;
 
       const data = await res.json();
-      console.log(data);
+      // console.log("data"+ JSON.stringify(data));
 
       setToken(data.token);
       setRoleToken(data.roleToken);
+      console.log("token: "+token);
       await fetchProfile();
       return true;
     } catch (err) {
@@ -103,13 +104,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  // logout function
   const logout = async () => {
     setToken(null);
     setRoleToken(null);
     setUser(null);
     // optionally call backend /auth/logout to clear refreshToken
     try {
-        const res = await fetch(`https://${API_URL}/auth/logout-refresh`, {
+        const res = await fetch(`http://${API_URL}/auth/logout-refresh`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include", // sets HttpOnly refresh token
