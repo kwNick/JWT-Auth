@@ -3,8 +3,8 @@
 import { jwtVerify } from "jose";
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 
-type Role = { name: string };
-type Shop = { name: string; location: string; user_id: string };
+type Role = {id: number, name: string };
+type Shop = {id: number, name: string; location: string; user_id: number };
 export type User = {
   username: string;
   email: string;
@@ -34,14 +34,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(true);
 
   // Fetch profile from backend, refresh access token if needed
-  const fetchProfile = async (): Promise<User | null> => {
+  const fetchProfile = async (overrideToken?: string): Promise<User | null> => {
     if (!API_URL) return null;
     
-    console.log("Beginning of FetchProfile - token: " + token);
+    const authToken = overrideToken ?? token;
+    console.log("Beginning of FetchProfile - token: " + authToken);
     try {
       let res = await fetch(`http://${API_URL}/api/profile`, {
         credentials: "include", // sends HttpOnly refresh token
-        headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+        headers: authToken ? { Authorization: `Bearer ${authToken}`} : undefined,
       });
 
       console.log("Profile fetch response status: " + res.status);
@@ -62,17 +63,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         }
 
         const data = await refreshRes.json();
-        setToken(data.token);
+
         // setRoleToken(data.roleToken);
         const { payload }: { payload: { roles: string[] } } = await jwtVerify(data.roleToken, new TextEncoder().encode("secret-key-making-it-very-strong"));
         // console.log("payload.roles: ", payload.roles);
         setRoleToken(payload.roles);
+        setToken(data.token);
 
         // Retry profile fetch with new token
         res = await fetch(`http://${API_URL}/api/profile`, {
           credentials: "include",
           headers: { Authorization: `Bearer ${data.token}` },
         });
+        console.log("Retry Profile fetch response status: " + res.status);
       }
 
       if (!res.ok) throw new Error("Failed to fetch profile again after refresh.");
@@ -105,11 +108,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const { payload }: { payload: { roles: string[] } } = await jwtVerify(data.roleToken, new TextEncoder().encode("secret-key-making-it-very-strong"));
       // console.log("payload.roles: ", payload.roles);
       setRoleToken(payload.roles);
-
       setToken(data.token);
-      // setRoleToken(data.roleToken);
 
-      await fetchProfile();
+      await fetchProfile(data.token);
       return true;
     } catch (err) {
       console.error("Failed to fetch Login: "+err);

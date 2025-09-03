@@ -1,4 +1,5 @@
 import DeleteButton from "@/components/DeleteButton";
+import ProfileDashboard from "@/components/ProfileDashboard";
 import { fetchProfile } from "@/lib/data";
 // import { fetchRoles, fetchShops, fetchUsers, fetchUsersWithDetails } from "@/lib/data";
 import Role from "@/lib/roleModel";
@@ -53,59 +54,7 @@ const page = async () => {
     return (
         <div className="p-4 flex flex-col gap-y-5 justify-center min-h-[85vh] font-[family-name:var(--font-geist-sans)] bg-white rounded-tl-2xl rounded-br-2xl shadow-md">
 
-            <div className="w-2/5">
-                <h1 className="text-3xl font-semibold mb-4">Hello, User - {profile.username} - <span className='text-xs'>{profile.roles.map(role => role.name)}</span></h1>
-            </div>
-
-            <div className="flex gap-8">
-                <div className="w-full max-w-2xl p-3 bg-gray-300 rounded-tl-2xl rounded-br-2xl shadow-md">
-
-                    <h1 className="text-xl font-semibold mb-4">Fetched from springboot /api/profile:</h1>
-
-                    <div className="flex flex-col gap-2">
-                        <p><span className="font-semibold">Username</span>: {profile.username}</p>
-                        <p><span className="font-semibold">Email</span>: {profile.email}</p>
-                        <p><span className="font-semibold">Password</span>: {profile.password}</p>
-                        <p><span className="font-semibold">Shops</span>:
-                            {profile.shops.map((shop: Shop) => {
-                                return (
-                                    <span className="italic" key={shop.name}>{shop.name} - {shop.location} - {shop.user_id}</span>
-                                );
-                            })}
-                        </p>
-                        <p><span className="font-semibold">Roles</span>:
-                            {profile.roles.map((role: Role) => {
-                                return (
-                                    <span className="italic" key={role.name}>{role.name}</span>
-                                )
-                            })}
-                        </p>
-                    </div>
-                </div>
-
-
-                <div className="w-full max-w-2xl p-3 bg-gray-300 rounded-tl-2xl rounded-br-2xl shadow-md">
-
-                    <h2 className="text-xl font-semibold mb-4">Your Shops</h2>
-
-                    <div>
-                        {profile.shops.length > 0 ? (
-                            <ul>
-                                {profile.shops.map((shop: Shop) => (
-                                    <li key={shop.name}>{shop.name} - {shop.location}</li>
-                                ))}
-                            </ul>
-                        ) : (
-                            <p>You have no shops.</p>
-                        )}
-                    </div>
-                    <div>
-                        <Link href="/edit-shops" className="text-blue-500 hover:underline">
-                            Edit Shops
-                        </Link>
-                    </div>
-                </div>
-            </div>
+           <ProfileDashboard />
 
             <div className="flex flex-col gap-y-4">
                 <div>
