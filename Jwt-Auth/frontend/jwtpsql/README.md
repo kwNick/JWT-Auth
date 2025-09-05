@@ -14,7 +14,7 @@ pnpm dev
 bun dev
 ```
 
-🔎 Why JWTs are useful even if they "disappear" on reload
+### 🔎 Why JWTs are useful even if they "disappear" on reload
 
 1. They let the server verify trust without storing session state
 
@@ -78,3 +78,94 @@ Keep access tokens short-lived and in memory only.
 Use refresh tokens in HttpOnly cookies for persistence.
 
 That way, you get the benefits of JWTs without the security downsides of storing them in localStorage
+
+
+### Alright — let’s dive into what’s inside a JWT and why it matters 👇
+
+🔑 Structure of a JWT
+
+A JWT is just three Base64URL-encoded parts:
+
+header.payload.signature
+
+
+Example (simplified):
+
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9   // header
+eyJzdWIiOiIxMjM0IiwidXNlcm5hbWUiOiJu... // payload
+TJVA95OrM7E2cBab30RMHrHDcEfxJoZ...      // signature
+
+1. Header
+
+Specifies metadata about the token:
+
+{
+  "alg": "HS256",  // algorithm used to sign
+  "typ": "JWT"     // type
+}
+
+2. Payload (Claims)
+
+This is where the useful information goes.
+Example for your app:
+
+{
+  "sub": "64f5a72c12ab",   // Subject: user ID
+  "username": "nick",
+  "roles": ["ADMIN", "USER"],
+  "shops": ["shop123", "shop456"],
+  "iat": 1735953000,       // issued at (epoch time)
+  "exp": 1735956600        // expiration (epoch time)
+}
+
+
+sub → who the token belongs to (user ID is the best choice, not username/email).
+
+username → optional, just for convenience.
+
+roles → permissions for your frontend/backend checks.
+
+shops → if a user has multiple shops, you could embed them.
+
+iat/exp → lets the server reject expired tokens automatically.
+
+3. Signature
+
+The server takes the header + payload, signs it with its secret/private key, and attaches the signature.
+
+When the backend receives the token, it recomputes the signature.
+
+If the signature matches → the token is trusted (it hasn’t been tampered with).
+
+🔎 Why this matters in your flow
+
+Stateless Authentication
+Your backend doesn’t need to look up a user session in a DB. The JWT itself carries identity + roles.
+
+Fast Authorization
+If a user hits GET /api/shops, the backend can just check:
+
+Token is valid (signature matches).
+
+Token isn’t expired.
+
+roles includes "ADMIN" or "SHOP_OWNER".
+
+→ No DB query required.
+
+Portability
+If you had multiple services (say an inventory service and an order service), they can all validate the same JWT without central session storage.
+
+Short-lived, disposable
+Even though you discard JWTs in React on refresh, the payload still matters because every request you make while the token is alive uses those claims.
+Example: when you’re clicking around your dashboard, each request carries your JWT → backend trusts it instantly.
+
+✅ TL;DR
+
+Even if you throw JWTs away on reload:
+
+They securely prove identity during a session.
+
+They carry subject (sub), roles, and claims so the backend doesn’t need to hit the DB every time.
+
+They’re self-contained: any service can validate them with just the signing key.

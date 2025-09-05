@@ -26,6 +26,24 @@ public class JwtUtil {
         return new SecretKeySpec(secretBytes, SignatureAlgorithm.HS256.getJcaName());
     }
 
+    public String generateAccessToken(String userId, String username, Set<Role> roles) { // For one token, we can have multiple claims
+        long now = System.currentTimeMillis();
+        long expiry = now + (1000 * 60 * 3); // 15 min
+
+        List<String> roleNames = roles.stream()
+                                  .map(Role::getName)
+                                  .collect(Collectors.toList());
+
+        return Jwts.builder()
+                .setSubject(userId)                  // "sub" claim
+                .claim("username", username)         // custom claim
+                .claim("roles", roleNames)               // custom claim
+                .setIssuedAt(new Date(now))          // "iat"
+                .setExpiration(new Date(expiry))     // "exp"
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256)   // sign with secret
+                .compact();
+    }
+
     public String generateToken(String username) {
         return Jwts.builder()
                 .setSubject(username)
