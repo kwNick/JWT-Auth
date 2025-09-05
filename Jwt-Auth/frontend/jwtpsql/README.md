@@ -14,23 +14,67 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+🔎 Why JWTs are useful even if they "disappear" on reload
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. They let the server verify trust without storing session state
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Traditional sessions: server keeps a session record in memory/DB keyed by a cookie.
 
-## Learn More
+JWTs: server signs the token with its secret key → the server can trust the token’s claims (sub, roles, expiry, etc.) without needing to look anything up.
 
-To learn more about Next.js, take a look at the following resources:
+This makes your backend stateless: it doesn’t need to remember every user session.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+2. They encode identity & claims
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The sub (subject) claim usually holds the user ID.
 
-## Deploy on Vercel
+Other claims can hold roles, permissions, or tenant/shop info.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+That way, when your backend sees the token, it immediately knows:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+who the user is
+
+what they’re allowed to do
+
+when the token expires
+…without another DB query (unless you need fresh data).
+
+3. They’re short-lived on purpose
+
+Access tokens (JWTs) are meant to be temporary — often just 5–15 minutes.
+
+They’re disposable because you always have a refresh token in a secure, HttpOnly cookie to get a new one.
+
+This reduces the blast radius if a token ever leaks (an attacker only gets a few minutes of access).
+
+4. Even though your React state clears on reload, the refresh cookie makes JWTs work long-term
+
+The fact you "discard" the access token in memory is actually a security feature.
+
+Instead of persisting a sensitive JWT in localStorage (which XSS could steal), you regenerate it on every reload using the refresh token (which is HttpOnly and inaccessible to JS).
+
+The refresh cookie is what persists your login across reloads, not the access token.
+
+5. They’re portable
+
+If you had multiple backend services (API Gateway, microservices, etc.), you wouldn’t want each one to look up a user session in a central DB.
+
+Instead, you issue one signed JWT → every service can independently verify and trust it.
+
+✅ So the benefit is:
+
+Security → short-lived tokens limit risk.
+
+Statelessness → server doesn’t need to track sessions.
+
+Portability → multiple services can trust the same token.
+
+Efficiency → backend can trust the token immediately without extra DB lookups.
+
+Your current flow (discard on reload, refresh for a new one) is the industry best practice:
+
+Keep access tokens short-lived and in memory only.
+
+Use refresh tokens in HttpOnly cookies for persistence.
+
+That way, you get the benefits of JWTs without the security downsides of storing them in localStorage
