@@ -1,9 +1,9 @@
 // middleware.ts
 import { NextRequest, NextResponse } from 'next/server';
-import { jwtVerify } from 'jose';
+// import { jwtVerify } from 'jose';
 
 export async function middleware(request: NextRequest) {
-    console.log("cookies:" +request.cookies);
+    // console.log("cookies:" +request.cookies);
 
     const refreshToken = request.cookies.get('refreshToken'); // use NextRequest in middleware to access cookies
 

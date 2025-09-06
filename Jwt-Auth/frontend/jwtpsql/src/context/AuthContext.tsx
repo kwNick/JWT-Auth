@@ -64,6 +64,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
         const data = await refreshRes.json();
 
+        console.log("Refresh fetch response data: " + JSON.stringify(data));
+
         // setRoleToken(data.roleToken);
         const { payload }: { payload: { roles: string[] } } = await jwtVerify(data.roleToken, new TextEncoder().encode("secret-key-making-it-very-strong"));
         // console.log("payload.roles: ", payload.roles);
@@ -81,6 +83,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       if (!res.ok) throw new Error("Failed to fetch profile again after refresh.");
 
       const profileData: User = await res.json();
+
+      console.log("Refresh fetch response data: " + JSON.stringify(profileData));
+      
       setUser(profileData);
       return profileData;
     } catch (err) {
@@ -103,7 +108,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       if (!res.ok) return false;
 
       const data = await res.json();
-      // console.log("data"+ JSON.stringify(data));
+      
+      console.log("data"+ JSON.stringify(data));
 
       const { payload }: { payload: { roles: string[] } } = await jwtVerify(data.roleToken, new TextEncoder().encode("secret-key-making-it-very-strong"));
       // console.log("payload.roles: ", payload.roles);

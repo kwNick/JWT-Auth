@@ -39,9 +39,7 @@ public class SecurityConfig {
                                 .requestMatchers("/api/users/**").hasRole("ADMIN") // Only ADMIN can fetch from the spring app on routes /api/users/**
                                 .requestMatchers("/users/**").hasRole("ADMIN")
                                 .requestMatchers("/roles/**").hasRole("ADMIN") // Only ADMIN can fetch from the spring app on routes /api/shops/**
-                                .requestMatchers("/edit-shops/**").hasRole("ADMIN") // Only ADMIN can fetch from the spring app on routes /api/edit-shops/**
                                 .requestMatchers("/shops/**").hasAnyRole("USER", "ADMIN") // Only USER or ADMIN can fetch from the spring app on routes /users/**
-                                .requestMatchers("/practice/**").hasAuthority("ADMIN")
                                 .anyRequest().authenticated()
                 )
                 // .exceptionHandling(ex -> ex.authenticationEntryPoint(unauthorizedHandler))

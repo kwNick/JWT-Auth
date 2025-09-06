@@ -76,6 +76,7 @@ public class AuthController {
                 new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
             );
 
+            // final String OneAccessToken = jwtUtil.generateAccessToken(user.getId(), user.getUsername(), user.getRoles());
             final String accessToken = jwtUtil.generateToken(request.getUsername());
             final String refreshToken = jwtUtil.generateRefreshToken(request.getUsername());
 
@@ -167,6 +168,7 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
 
+        // final String OneAccessToken = jwtUtil.generateAccessToken(user.getId(), user.getUsername(), user.getRoles());
         final String newAccessToken = jwtUtil.generateToken(username);
         final User resultUser = userService.findByUsername(username);
         final String newRoleToken = jwtUtil.generateRolesToken(resultUser.getRoles());
@@ -183,6 +185,7 @@ public class AuthController {
             final User user = userService.registerNewUser(request);
 
             // Generate tokens
+            // final String OneAccessToken = jwtUtil.generateAccessToken(user.getId(), user.getUsername(), user.getRoles());
             final String accessToken = jwtUtil.generateToken(user.getUsername());
             final String refreshToken = jwtUtil.generateRefreshToken(user.getUsername());
 
