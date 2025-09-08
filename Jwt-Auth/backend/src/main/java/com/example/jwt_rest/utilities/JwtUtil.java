@@ -26,7 +26,7 @@ public class JwtUtil {
         return new SecretKeySpec(secretBytes, SignatureAlgorithm.HS256.getJcaName());
     }
 
-    public String generateAccessToken(String userId, String username, Set<Role> roles) { // For one token, we can have multiple claims
+    public String generateFullToken(String userId, String username, Set<Role> roles) { // For one token, we can have multiple claims
         long now = System.currentTimeMillis();
         long expiry = now + (1000 * 60 * 3); // 15 min
 
@@ -53,9 +53,10 @@ public class JwtUtil {
                 .compact();
     }
     
-    public String generateRefreshToken(String username) {
+    public String generateRefreshToken(String userId, String username) {
         return Jwts.builder()
-            .setSubject(username)
+            .setSubject(userId)
+            .claim("username", username)
             .setIssuedAt(new Date())
             .setExpiration(new Date(System.currentTimeMillis() + 1000L * 60 * 60 * 1 * 1)) // 1 hour
             .signWith(getSigningKey(), SignatureAlgorithm.HS256)
@@ -83,12 +84,21 @@ public class JwtUtil {
         .compact();
     }
 
-    public String extractUsername(String token) {
+    public String extractUserId(String token) {
         return Jwts.parserBuilder().setSigningKey(getSigningKey())
                 .build()
                 .parseClaimsJws(token)
                 .getBody()
                 .getSubject();
+    }
+
+    public String extractUsername(String token) {
+    return Jwts.parserBuilder()
+            .setSigningKey(getSigningKey())
+            .build()
+            .parseClaimsJws(token)
+            .getBody()
+            .get("username", String.class);
     }
 
     public boolean validateToken(String token, UserDetails userDetails) {

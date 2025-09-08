@@ -3,27 +3,21 @@ package com.example.jwt_rest.dtos;
 import com.example.jwt_rest.models.User;
 
 public class RefreshResponse {
-    private String roleToken;
-    private String token;
+    // private String roleToken;
+    // private String token;
+    private String fullToken;
     
-    public RefreshResponse(String roleToken, String token) {
-        this.roleToken = roleToken;
-        this.token = token;
-    }
-    
-    public String getRoleToken() {
-        return roleToken;
+    public RefreshResponse(String fullToken) {
+        // this.roleToken = roleToken;
+        // this.token = token;
+        this.fullToken = fullToken;
     }
 
-    public void setRoleToken(String roleToken) {
-        this.roleToken = roleToken;
+    public String getFullToken() {
+        return fullToken;
     }
 
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
+    public void setFullToken(String fullToken) {
+        this.fullToken = fullToken;
     }
 }

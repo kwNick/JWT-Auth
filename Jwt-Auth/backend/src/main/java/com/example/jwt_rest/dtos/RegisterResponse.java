@@ -10,27 +10,21 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 // @AllArgsConstructor
 public class RegisterResponse {
-    private String roleToken;
-    private String token;
+    // private String roleToken;
+    // private String token;
+    private String fullToken;
     
-    public RegisterResponse(String roleToken, String token) {
-        this.roleToken = roleToken;
-        this.token = token;
+    public RegisterResponse(String fullToken) {
+        // this.roleToken = roleToken;
+        // this.token = token;
+        this.fullToken = fullToken;
     }
 
-    public String getToken() {
-        return token;
+    public String getFullToken() {
+        return fullToken;
     }
 
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    public String getRoleToken() {
-        return roleToken;
-    }
-
-    public void setRoleToken(String roleToken) {
-        this.roleToken = roleToken;
+    public void setFullToken(String fullToken) {
+        this.fullToken = fullToken;
     }
 }

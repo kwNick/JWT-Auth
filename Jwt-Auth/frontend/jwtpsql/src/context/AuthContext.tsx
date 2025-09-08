@@ -15,7 +15,7 @@ export type User = {
 
 type AuthContextType = {
   token: string | null;
-  roleToken: string[] | null;
+  role: string[] | null;
   user: User | null;
   loading: boolean;
   login: (username: string, password: string) => Promise<boolean>;
@@ -29,7 +29,7 @@ const API_URL = process.env.NEXT_PUBLIC_JWT_AUTH_API_DOMAIN;
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [token, setToken] = useState<string | null>(null);
-  const [roleToken, setRoleToken] = useState<string[] | null>(null);
+  const [role, setRole] = useState<string[] | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -38,14 +38,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     if (!API_URL) return null;
     
     const authToken = overrideToken ?? token;
-    console.log("Beginning of FetchProfile - token: " + authToken);
     try {
       let res = await fetch(`http://${API_URL}/api/profile`, {
         credentials: "include", // sends HttpOnly refresh token
         headers: authToken ? { Authorization: `Bearer ${authToken}`} : undefined,
       });
-
-      console.log("Profile fetch response status: " + res.status);
 
       // If token expired, refresh
       if (res.status == 403) {
@@ -53,8 +50,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           method: "POST",
           credentials: "include", // refreshToken cookie
         });
-
-        console.log("Refresh fetch response status: " + refreshRes.status);
         
         if (!refreshRes.ok) {
           console.log("Logging out due to failed refresh!");
@@ -64,30 +59,24 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
         const data = await refreshRes.json();
 
-        console.log("Refresh fetch response data: " + JSON.stringify(data));
-
-        // setRoleToken(data.roleToken);
-        const { payload }: { payload: { roles: string[] } } = await jwtVerify(data.roleToken, new TextEncoder().encode("secret-key-making-it-very-strong"));
-        // console.log("payload.roles: ", payload.roles);
-        setRoleToken(payload.roles);
-        setToken(data.token);
+        const { payload }: {payload: {roles: string[], username: String}} = await jwtVerify(data.fullToken, new TextEncoder().encode("secret-key-making-it-very-strong"));
+        setRole(payload.roles);
+        setToken(data.fullToken);
 
         // Retry profile fetch with new token
         res = await fetch(`http://${API_URL}/api/profile`, {
           credentials: "include",
-          headers: { Authorization: `Bearer ${data.token}` },
+          headers: { Authorization: `Bearer ${data.fullToken}` },
         });
-        console.log("Retry Profile fetch response status: " + res.status);
       }
 
       if (!res.ok) throw new Error("Failed to fetch profile again after refresh.");
 
       const profileData: User = await res.json();
-
-      console.log("Refresh fetch response data: " + JSON.stringify(profileData));
       
       setUser(profileData);
       return profileData;
+
     } catch (err) {
       console.error("Failed to fetch Profile: "+err);
       logout();
@@ -109,15 +98,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       const data = await res.json();
       
-      console.log("data"+ JSON.stringify(data));
+      console.log("data: "+ JSON.stringify(data));
 
-      const { payload }: { payload: { roles: string[] } } = await jwtVerify(data.roleToken, new TextEncoder().encode("secret-key-making-it-very-strong"));
-      // console.log("payload.roles: ", payload.roles);
-      setRoleToken(payload.roles);
-      setToken(data.token);
+      const { payload }: {payload: {roles: string[], username: String}} = await jwtVerify(data.fullToken, new TextEncoder().encode("secret-key-making-it-very-strong"));
+      
+      setToken(data.fullToken);
+      setRole(payload.roles);
 
-      await fetchProfile(data.token);
+      await fetchProfile(data.fullToken);
       return true;
+
     } catch (err) {
       console.error("Failed to fetch Login: "+err);
       return false;
@@ -128,10 +118,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   // logout function
   const logout = async () => {
     setToken(null);
-    setRoleToken(null);
+    setRole(null);
     setUser(null);
-    // setLoading(true);
-    // optionally call backend /auth/logout to clear refreshToken
+
+    // optionally call backend /auth/logout-refresh to clear refreshToken
     try {
         await fetch(`http://${API_URL}/auth/logout-refresh`, {
         method: "POST",
@@ -140,7 +130,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     } catch (error) {
         console.error("Logout Request Failed: "+error);
     }
-    // setLoading(false);
   };
 
   // On mount, attempt to refresh access token automatically
@@ -152,7 +141,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ token, roleToken, user, loading, login, logout, fetchProfile }}>
+    <AuthContext.Provider value={{ token, role, user, loading, login, logout, fetchProfile }}>
       {children}
     </AuthContext.Provider>
   );

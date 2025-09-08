@@ -60,9 +60,6 @@ public class AuthController {
         return buckets.computeIfAbsent(ip, k -> Bucket4j.builder()
             .addLimit(limit)
             .build());
-        // return buckets.computeIfAbsent(ip, k -> Bucket4j.builder()
-        //     .addLimit(Bandwidth.simple(12, Duration.ofMinutes(2)))
-        //     .build());
     }
 
     // For access token and refresh token
@@ -76,52 +73,27 @@ public class AuthController {
                 new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
             );
 
-            // final String OneAccessToken = jwtUtil.generateAccessToken(user.getId(), user.getUsername(), user.getRoles());
-            final String accessToken = jwtUtil.generateToken(request.getUsername());
-            final String refreshToken = jwtUtil.generateRefreshToken(request.getUsername());
-
-            final User resultUser = userService.findByUsername(request.getUsername());
-
-            // final Cookie refreshCookie = new Cookie("refreshToken", refreshToken);
-            //     refreshCookie.setHttpOnly(true);
-            //     refreshCookie.setPath("/");
-            //     refreshCookie.setSecure(false);
-            //     refreshCookie.setDomain("localhost");
-            //     refreshCookie.setMaxAge(1 * 1 * 60 * 30); // 30 minutes
-            //     refreshCookie.setSameSite("None"); //doesnt support SameSite attribute in Java 8
-            //     response.addCookie(refreshCookie); // adds cookie to the response but does not support SameSite attribute
+            // final UserDetails user = userDetailsService.loadUserByUsername(request.getUsername()); //userDetailsService returns UserDetails object: username, password, authorities
+            final User resultUser = userService.findByUsername(request.getUsername()); //userService returns the User model
             
-            // Manually add SameSite attribute
-            // response.setHeader("Set-Cookie", String.format("%s=%s; Path=/; HttpOnly; MaxAge=3600; SameSite=None; Secure=false", refreshCookie.getName(), refreshCookie.getValue()));
+            final String fullToken = jwtUtil.generateFullToken(resultUser.getId().toString(), resultUser.getUsername(), resultUser.getRoles());
+            
+            // final String accessToken = jwtUtil.generateToken(request.getUsername());
+            // final String rolesToken = jwtUtil.generateRolesToken(resultUser.getRoles());
 
-            // String cookie = String.format(
-            //     "refreshToken=%s; HttpOnly; Path=/; Max-Age=3600; SameSite=None; Secure",
-            //     refreshToken
-            // );
-            // response.setHeader("Set-Cookie", cookie); //what is the difference between setheader and addheader?
-
+            final String refreshToken = jwtUtil.generateRefreshToken(resultUser.getId().toString(), request.getUsername());
             ResponseCookie cookie = ResponseCookie.from("refreshToken", refreshToken) //Spring’s ResponseCookie *newer, Recommended way in modern spring apps
                 .httpOnly(true)
-                .secure(true) // Secure = false in dev, true in prod with HTTPS
+                .secure(true)
                 .path("/")
                 .maxAge(1 * 1 * 60 * 60)
                 .sameSite("None") // Allows cross-site cookies; for dev, set to "Lax" or "Strict" if needed
                 // .domain("jwt-auth.duckdns.org") // optional, but makes it explicit
                 .build();
-            response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
-            // When you call cookie.toString(), Spring generates a properly formatted Set-Cookie header
+            response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());      // When you call cookie.toString(), Spring generates a properly formatted Set-Cookie header
 
-            // Cookie cookie = new Cookie("refreshToken", refreshToken);
-            // cookie.setHttpOnly(true);
-            // cookie.setSecure(true);
-            // cookie.setPath("/");
-            // cookie.setMaxAge(60 * 60);
-            // response.addCookie(cookie); //No SameSite, because javax.servlet.http.Cookie doesn’t support it
+            return ResponseEntity.ok(new AuthResponse(fullToken));
 
-            // final String roles = resultUser.getRoles();
-            final String rolesToken = jwtUtil.generateRolesToken(resultUser.getRoles());
-
-            return ResponseEntity.ok(new AuthResponse(rolesToken, accessToken));
         } else {
             return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).build();
         }
@@ -138,42 +110,22 @@ public class AuthController {
     //Try this ---
     // public ResponseEntity<String> getProfile(@CookieValue(value = "refreshToken", required = false) String refreshToken) {
     @PostMapping("/refresh")
-    public ResponseEntity<RefreshResponse> refreshToken(@CookieValue(value="refreshToken", required=false) String refreshToken, HttpServletRequest request, HttpServletResponse response) {
-
-        //Manual cookie grab
-        // final String refreshToken = Optional.ofNullable(request.getCookies())   //Optional.ofNullable(cookies) wraps cookies, even if it’s null.
-        //     .map(Arrays::stream)    //If cookies is not null, .map(Arrays::stream) turns it to a stream.
-        //     .orElseGet(Stream::empty) //If cookies is null, return an empty stream to avoid null pointer exception
-        //     .filter(c -> c.getName().equals("refreshToken"))
-        //     .findFirst()
-        //     .map(Cookie::getValue)
-        //     .orElse(null); 
-
-        //Manually
-        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
-        // final Cookie[] cookies = request.getCookies();
-        // // System.out.println("Cookies: " + Arrays.toString(cookies));
-        
-        // final String refreshToken = (cookies == null) ? null : Arrays.stream(cookies) // java.lang.NullPointerException: Cannot read the array length because "array" is null
-        //     .filter(c -> c.getName().equals("refreshToken"))
-        //     .findFirst()
-        //     .map(Cookie::getValue)
-        //     .orElse(null);
-        System.out.println("Refresh Token: " + refreshToken);
+    public ResponseEntity<RefreshResponse> refreshToken(@CookieValue(value="refreshToken", required=false) String refreshToken, HttpServletRequest request, HttpServletResponse response) { 
 
         final String username = jwtUtil.extractUsername(refreshToken);
         final UserDetails user = userDetailsService.loadUserByUsername(username);
+        final User resultUser = userService.findByUsername(username);
 
         if (refreshToken == null || !jwtUtil.validateToken(refreshToken, user)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
 
-        // final String OneAccessToken = jwtUtil.generateAccessToken(user.getId(), user.getUsername(), user.getRoles());
-        final String newAccessToken = jwtUtil.generateToken(username);
-        final User resultUser = userService.findByUsername(username);
-        final String newRoleToken = jwtUtil.generateRolesToken(resultUser.getRoles());
+        final String fullToken = jwtUtil.generateFullToken(resultUser.getId().toString(), resultUser.getUsername(), resultUser.getRoles());
 
-        return ResponseEntity.ok(new RefreshResponse(newRoleToken, newAccessToken));
+        // final String newAccessToken = jwtUtil.generateToken(username);
+        // final String newRoleToken = jwtUtil.generateRolesToken(resultUser.getRoles());
+
+        return ResponseEntity.ok(new RefreshResponse(fullToken));
     }
 
     @PostMapping("/register-refresh")
@@ -183,22 +135,14 @@ public class AuthController {
         Bucket bucket = resolveBucket(ip);
         if (bucket.tryConsume(1)) {
             final User user = userService.registerNewUser(request);
-
-            // Generate tokens
-            // final String OneAccessToken = jwtUtil.generateAccessToken(user.getId(), user.getUsername(), user.getRoles());
-            final String accessToken = jwtUtil.generateToken(user.getUsername());
-            final String refreshToken = jwtUtil.generateRefreshToken(user.getUsername());
-
             final User resultUser = userService.findByUsername(request.getUsername());
 
-            // final Cookie refreshCookie = new Cookie("refreshToken", refreshToken);
-            //     refreshCookie.setHttpOnly(true);
-            //     refreshCookie.setSecure(true); // Set to true if using HTTPS
-            //     refreshCookie.setPath("/");
-            //     refreshCookie.setMaxAge(1 * 1 * 60 * 60); // 1 hour
-            //     response.addCookie(refreshCookie);
+            final String fullToken = jwtUtil.generateFullToken(resultUser.getId().toString(), resultUser.getUsername(), resultUser.getRoles());
 
-            // Set refresh token in cookie //using ResponseCookie
+            // final String accessToken = jwtUtil.generateToken(user.getUsername());
+            // final String rolesToken = jwtUtil.generateRolesToken(resultUser.getRoles());
+
+            final String refreshToken = jwtUtil.generateRefreshToken(resultUser.getId().toString(), user.getUsername());  // Set refresh token in cookie //using ResponseCookie
             ResponseCookie refreshCookie = ResponseCookie.from("refreshToken", refreshToken)
                 .httpOnly(true)
                 .secure(true)
@@ -206,13 +150,9 @@ public class AuthController {
                 .maxAge(1 * 1 * 60 * 60) //1 hour (old value: 5 days)
                 .sameSite("None")
                 .build();
-
             response.addHeader(HttpHeaders.SET_COOKIE, refreshCookie.toString());
 
-            // final String roles = resultUser.getRoles();
-            final String rolesToken = jwtUtil.generateRolesToken(resultUser.getRoles());
-
-            return ResponseEntity.ok(new RegisterResponse(rolesToken, accessToken));
+            return ResponseEntity.ok(new RegisterResponse(fullToken));
 
         } else {
             return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).build();
@@ -221,15 +161,8 @@ public class AuthController {
 
     @PostMapping("/logout-refresh")
     public ResponseEntity<String> logout(HttpServletResponse response) {
-        // Invalidate the refresh token cookie
-        // Use ResponseCookie here instead of Cookie
-        // final Cookie deleteRefreshCookie = new Cookie("refreshToken", "");
-        //     deleteRefreshCookie.setHttpOnly(true);
-        //     deleteRefreshCookie.setSecure(true);
-        //     deleteRefreshCookie.setPath("/");
-        //     deleteRefreshCookie.setMaxAge(0);// <--- deletes the cookie
-        //     response.addCookie(deleteRefreshCookie);
 
+        // Invalidate the refresh token cookie
         ResponseCookie cookie = ResponseCookie.from("refreshToken", "")
             .httpOnly(true)
             .secure(true) // same as when you set it
@@ -237,7 +170,6 @@ public class AuthController {
             .maxAge(0)    // expire immediately
             .sameSite("None") // must match
             .build();
-
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
 
         SecurityContextHolder.clearContext();

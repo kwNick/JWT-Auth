@@ -42,23 +42,12 @@ public class SecurityConfig {
                                 .requestMatchers("/shops/**").hasAnyRole("USER", "ADMIN") // Only USER or ADMIN can fetch from the spring app on routes /users/**
                                 .anyRequest().authenticated()
                 )
-                // .exceptionHandling(ex -> ex.authenticationEntryPoint(unauthorizedHandler))
                 // Stateless session (required for JWT)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) //no sessions
-                // .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class) //Ensures your JwtFilter is executed before the default login filter, so it can validate the token early.
                 .build();
     }
-    // return http
-    //             .csrf().disable()
-    //             .authorizeHttpRequests(auth -> auth
-    //                 .requestMatchers("/auth/**").permitAll()
-    //                 .anyRequest().authenticated()
-    //             )
-    //             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-    //             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-    //             .build();
-    // }
+
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
@@ -82,17 +71,11 @@ public class SecurityConfig {
                 authManagerBuilder.userDetailsService(service).passwordEncoder(encoder); //using password encoder bcrypt hashed password
                 // authManagerBuilder.userDetailsService(service); //using plain text password
                 return authManagerBuilder.build();
-        // return http.getSharedObject(AuthenticationManagerBuilder.class)
-        //         .userDetailsService(service)
-        //         .passwordEncoder(encoder)
-        //         .and()
-        //         .build();
     }
 
     
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-        // return NoOpPasswordEncoder.getInstance();
     }
 }

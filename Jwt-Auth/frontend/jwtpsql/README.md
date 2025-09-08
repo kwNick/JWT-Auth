@@ -169,3 +169,38 @@ They securely prove identity during a session.
 They carry subject (sub), roles, and claims so the backend doesn’t need to hit the DB every time.
 
 They’re self-contained: any service can validate them with just the signing key.
+
+### Fetching from the client so that I can have refreshToken cookie
+
+You had to fetch from the client so that your refreshToken cookie (which is marked as HttpOnly) would actually get sent back to your backend by the browser. Let’s break it down:
+
+1. HttpOnly cookies can’t be read in JavaScript
+
+You put the refresh token inside an HttpOnly cookie for security reasons (so document.cookie or React state can’t access it and expose it to XSS).
+
+Because of this, your frontend code cannot directly grab the refresh token value and manually attach it in headers.
+
+2. The browser handles cookies automatically on requests
+
+When you make a request to your backend from the client (using fetch or axios), the browser automatically attaches cookies for that domain/path (including HttpOnly cookies).
+
+This means the backend will receive the refresh token without you ever touching it on the frontend.
+
+3. Why you couldn’t just do it on the server-side (Next.js server actions / API routes)?
+
+If you only run a server action or API route without going through the browser, the request doesn’t carry your browser’s cookies by default.
+
+That’s why you needed to trigger a client-side fetch—so that the browser would attach the refresh token cookie and send it to your Spring Boot backend.
+
+4. Flow Recap
+
+Login → backend sets refreshToken in an HttpOnly cookie.
+
+Later, when access token expires → frontend makes a fetch('/api/auth/refresh').
+
+Browser auto-includes refreshToken cookie.
+
+Backend verifies refresh token → issues new access token → frontend gets it back (in response body or headers).
+
+👉 In short:
+You had to fetch from the client because that’s the only way to get the browser to attach the HttpOnly cookie with the refresh token when calling your backend.
