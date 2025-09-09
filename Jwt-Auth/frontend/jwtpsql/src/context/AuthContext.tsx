@@ -18,8 +18,9 @@ type AuthContextType = {
   role: string[] | null;
   user: User | null;
   loading: boolean;
-  login: (username: string, password: string) => Promise<boolean>;
+  login: (username: string, password: string) => Promise<boolean | null>;
   logout: () => void;
+  register: (username: string, email: string, password: string) => Promise<boolean | null>;
   fetchProfile: () => Promise<User | null>;
 };
 
@@ -32,6 +33,87 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [role, setRole] = useState<string[] | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+
+  // Login function
+  const login = async (username: string, password: string): Promise<boolean | null> => {
+    if (!API_URL) return null;
+    try {
+      const res = await fetch(`http://${API_URL}/auth/login-refresh`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+        credentials: "include", // sets HttpOnly refresh token
+      });
+
+      if (!res.ok) return false;
+
+      const data = await res.json();
+      
+      console.log("Logged in: "+ JSON.stringify(data));
+
+      const { payload }: {payload: {roles: string[], username: String}} = await jwtVerify(data.fullToken, new TextEncoder().encode("secret-key-making-it-very-strong"));
+      
+      setToken(data.fullToken);
+      setRole(payload.roles);
+
+      await fetchProfile(data.fullToken);
+      return true;
+
+    } catch (err) {
+      console.error("Failed to fetch Login: "+err);
+      return false;
+    }
+    
+  };
+
+  // Register a User
+  const register = async (username: string, email: string, password: string): Promise<boolean | null> => {
+    if (!API_URL) return null;
+
+    try {
+      const res = await fetch(`http://${API_URL}/auth/register-refresh`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, email, password }),
+        credentials: "include",
+      });
+      if (!res.ok) return false;
+
+      const data = await res.json();
+      
+      console.log("Registered: "+ JSON.stringify(data));
+
+      const { payload }: {payload: {roles: string[], username: String}} = await jwtVerify(data.fullToken, new TextEncoder().encode("secret-key-making-it-very-strong"));
+      
+      setToken(data.fullToken);
+      setRole(payload.roles);
+
+      await fetchProfile(data.fullToken);
+      return true;
+
+    } catch (err) {
+      console.error("Failed to fetch Register: " + err);
+      return false;
+    }
+
+  };
+
+  // logout function
+  const logout = async () => {
+    setToken(null);
+    setRole(null);
+    setUser(null);
+
+    // optionally call backend /auth/logout-refresh to clear refreshToken
+    try {
+        await fetch(`http://${API_URL}/auth/logout-refresh`, {
+        method: "POST",
+        credentials: "include", // sets HttpOnly refresh token
+      });
+    } catch (error) {
+        console.error("Logout Request Failed: " + error);
+    }
+  };
 
   // Fetch profile from backend, refresh access token if needed
   const fetchProfile = async (overrideToken?: string): Promise<User | null> => {
@@ -84,54 +166,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  // Login function
-  const login = async (username: string, password: string): Promise<boolean> => {
-    try {
-      const res = await fetch(`http://${API_URL}/auth/login-refresh`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
-        credentials: "include", // sets HttpOnly refresh token
-      });
-
-      if (!res.ok) return false;
-
-      const data = await res.json();
-      
-      console.log("data: "+ JSON.stringify(data));
-
-      const { payload }: {payload: {roles: string[], username: String}} = await jwtVerify(data.fullToken, new TextEncoder().encode("secret-key-making-it-very-strong"));
-      
-      setToken(data.fullToken);
-      setRole(payload.roles);
-
-      await fetchProfile(data.fullToken);
-      return true;
-
-    } catch (err) {
-      console.error("Failed to fetch Login: "+err);
-      return false;
-    }
-    
-  };
-
-  // logout function
-  const logout = async () => {
-    setToken(null);
-    setRole(null);
-    setUser(null);
-
-    // optionally call backend /auth/logout-refresh to clear refreshToken
-    try {
-        await fetch(`http://${API_URL}/auth/logout-refresh`, {
-        method: "POST",
-        credentials: "include", // sets HttpOnly refresh token
-      });
-    } catch (error) {
-        console.error("Logout Request Failed: "+error);
-    }
-  };
-
   // On mount, attempt to refresh access token automatically
   useEffect(() => {
     (async () => {
@@ -141,7 +175,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ token, role, user, loading, login, logout, fetchProfile }}>
+    <AuthContext.Provider value={{ token, role, user, loading, login, register, logout, fetchProfile }}>
       {children}
     </AuthContext.Provider>
   );

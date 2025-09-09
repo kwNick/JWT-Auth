@@ -25,6 +25,9 @@ const AuthButtons = () => {
                 <Link href="/login-client" className="bg-secondary hover:bg-accent duration-300 font-bold py-2 px-4 rounded">
                     LoginClient
                 </Link>
+                <Link href="/register-client" className="bg-secondary hover:bg-accent duration-300 font-bold py-2 px-4 rounded">
+                    RegisterClient
+                </Link>
                 {/* <Link href="/login" className="bg-secondary hover:bg-accent duration-300 font-bold py-2 px-4 rounded">
                     Login
                 </Link>
