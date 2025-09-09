@@ -115,6 +115,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   // logout function
   const logout = async () => {
+    // optionally call backend /auth/logout-refresh to clear refreshToken
+    try {
+      await fetch(`http://${API_URL}/auth/logout-refresh`, {
+        method: "POST",
+        credentials: "include", // sets HttpOnly refresh token
+      });
+    } catch (error) {
+      console.error("Logout Request Failed: " + error);
+    }
+
     setToken(null);
     setRole(null);
     setUser(null);
@@ -123,15 +133,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setShops(null);
     setRoles(null);
 
-    // optionally call backend /auth/logout-refresh to clear refreshToken
-    try {
-        await fetch(`http://${API_URL}/auth/logout-refresh`, {
-        method: "POST",
-        credentials: "include", // sets HttpOnly refresh token
-      });
-    } catch (error) {
-        console.error("Logout Request Failed: " + error);
-    }
   };
 
   // Fetch profile from backend, refresh access token if needed
@@ -275,7 +276,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const usersData: {_embedded: {users: User[] } }= await res.json();
 
       setUsers(usersData._embedded.users);
-      // console.log("Fetched Users: " + JSON.stringify(usersData));
       return usersData._embedded.users;
     
     } catch (err) {
@@ -382,6 +382,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+// 
+// An IIFE stands for Immediately Invoked Function Expression.
+// (async () => { /* code */ })();
+// It’s a JavaScript function that runs as soon as it is defined.
+// The function is defined within parentheses to make it an expression,
+// and then followed by another set of parentheses to invoke it immediately.
+// This pattern is often used to create a new scope, especially in async code,
+// allowing the use of await at the top level without blocking the surrounding code.
   // On mount, attempt to refresh access token automatically
   useEffect(() => {
     (async () => {
@@ -392,12 +400,41 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if(role?.includes("ROLE_ADMIN")){
-        (async () => {
-          await fetchUsersWithDetails();
-          await fetchUsers();
-          await fetchShops();
-          await fetchRoles();
+      // Pros: Predictable order, useful if later calls depend on earlier results.
+      // (async () => {  // Runs sequentially: Each await pauses execution until the previous function finishes.
+      //     await fetchUsersWithDetails();
+      //     await fetchUsers();
+      //     await fetchShops();
+      //     await fetchRoles();
+      //   })();
+
+      // Runs concurrently:
+      // Each IIFE is kicked off immediately. They all run in parallel, and don’t wait for each other.
+      // Order is not guaranteed (they may complete at different times).
+      // Failures in one do not prevent others from running.
+      // Pros: Faster if the functions are independent.
+        // (async () => {
+        //   await fetchUsersWithDetails();
+        // })();
+        // (async () => {
+        //   await fetchUsers();
+        // })();
+        // (async () => {
+        //   await fetchShops();
+        // })();
+        // (async () => {
+        //   await fetchRoles();
+        // })();
+
+        (async () => { //you run them all in parallel but still get a single await for completion.
+          await Promise.all([
+            fetchUsersWithDetails(),
+            fetchUsers(),
+            fetchShops(),
+            fetchRoles(),
+          ]);
         })();
+
     }
   }, [role]);
 
