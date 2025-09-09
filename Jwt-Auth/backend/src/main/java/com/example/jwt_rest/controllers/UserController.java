@@ -57,15 +57,6 @@ public class UserController {
         }
 
         // Optional: Also delete related data like orders, carts, etc.
-        
-        // Invalidate the refresh token cookie
-        // final Cookie deleteRefreshCookie = new Cookie("refreshToken", "");
-        // deleteRefreshCookie.setHttpOnly(true);
-        // deleteRefreshCookie.setSecure(true);
-        // deleteRefreshCookie.setPath("/");
-        // deleteRefreshCookie.setMaxAge(0);// <--- deletes the cookie
-        // response.addCookie(deleteRefreshCookie);
-        
         ResponseCookie deleteRefreshCookie = ResponseCookie.from("refreshToken", "")
                 .httpOnly(true)
                 .secure(true)
