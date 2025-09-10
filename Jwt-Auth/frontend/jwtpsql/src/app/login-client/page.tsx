@@ -1,12 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
-// import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 
 export default function LoginPage() {
   const { login } = useAuth();
-  // const router = useRouter();
+  const router = useRouter();
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -45,6 +45,8 @@ export default function LoginPage() {
 
     if (!success) {
       setError("Invalid username or password");
+    }else{
+      router.refresh();
     }
 
   };

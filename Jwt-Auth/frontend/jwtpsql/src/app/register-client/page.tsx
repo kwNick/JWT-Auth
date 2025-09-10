@@ -1,12 +1,12 @@
 'use client';
 import { useAuth } from "@/context/AuthContext";
-// import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function RegisterPage() {
 
   const { register } = useAuth();
-  // const router = useRouter();
+  const router = useRouter();
 
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -46,6 +46,8 @@ export default function RegisterPage() {
 
     if (!success) {
       setError("Invalid username or password");
+    }else{
+      router.refresh();
     }
   };
 
