@@ -9,7 +9,8 @@ export async function middleware(request: NextRequest) {
     const refreshToken = request.cookies.get('refreshToken'); // use NextRequest in middleware to access cookies
     console.log("refreshToken:" + refreshToken);
     // const isLoggedIn = request.cookies.get('token'); // use NextRequest in middleware to access cookies
-
+    const vercelJwt = request.cookies.get('_vercel_jwt'); // use NextRequest in middleware to access cookies
+    console.log("_vercel_jwt:" + vercelJwt);
 
     let isLoggedIn = false; // Default to false
     if (refreshToken?.value) {
