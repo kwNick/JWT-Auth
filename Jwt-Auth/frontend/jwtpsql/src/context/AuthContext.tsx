@@ -71,6 +71,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setToken(data.fullToken);
       setRole(payload.roles);
 
+      document.cookie = `role=${payload.roles.join(",")}; max-age=180; path=/; secure; samesite=strict`; // Store roles in a non-HttpOnly cookie for middleware access
+
       await fetchProfile(data.fullToken);
       return true;
 
@@ -103,6 +105,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setToken(data.fullToken);
       setRole(payload.roles);
 
+      document.cookie = `role=${payload.roles.join(",")}; max-age=180; path=/; secure; samesite=strict`; // Store roles in a non-HttpOnly cookie for middleware access
+
       await fetchProfile(data.fullToken);
       return true;
 
@@ -132,6 +136,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setUsers(null);
     setShops(null);
     setRoles(null);
+    document.cookie = `role=; max-age=0; path=/`; // Store roles in a non-HttpOnly cookie for middleware access
 
   };
 
