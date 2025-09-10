@@ -3,10 +3,11 @@ import { NextRequest, NextResponse } from 'next/server';
 // import { jwtVerify } from 'jose';
 
 export async function middleware(request: NextRequest) {
-    console.log("cookies:" +request.cookies);
-
+    console.log("cookies:" + request.cookies.toString()); // In production, cookies are HttpOnly and won't be accessible via edge middleware
+    // Try to save a value on login and access it here, 'role' saved in-memory - if you can't access that then save a front-end cookie that identifies the role
+    // console.log("");
     const refreshToken = request.cookies.get('refreshToken'); // use NextRequest in middleware to access cookies
-
+    console.log("refreshToken:" + refreshToken);
     // const isLoggedIn = request.cookies.get('token'); // use NextRequest in middleware to access cookies
 
 
