@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 // import { jwtVerify } from 'jose';
 
 export async function middleware(request: NextRequest) {
-    // console.log("cookies:" +request.cookies);
+    console.log("cookies:" +request.cookies);
 
     const refreshToken = request.cookies.get('refreshToken'); // use NextRequest in middleware to access cookies
 
@@ -14,6 +14,7 @@ export async function middleware(request: NextRequest) {
     if (refreshToken?.value) {
         isLoggedIn = true; // If token exists, user is logged in
     }
+    console.log("isLoggedIn:" + isLoggedIn);
 
     // const roleToken = request.cookies.get('roleToken'); // use NextRequest in middleware to access cookies
 
@@ -52,7 +53,7 @@ export async function middleware(request: NextRequest) {
         //Or Redirect to admin dashboard if the user is an admin
     }
 
-    const isRegisterPage = request.nextUrl.pathname.startsWith('/register');
+    const isRegisterPage = request.nextUrl.pathname.startsWith('/register-client');
     // // If the user is trying to access the register page while already logged in
     if (isRegisterPage && isLoggedIn) {
         // if (isAdmin) {        //Or Redirect to admin dashboard if the user has admin roles
@@ -65,5 +66,5 @@ export async function middleware(request: NextRequest) {
 };
 
 export const config = {
-    matcher: ['/admin-dashboard', '/user-dashboard', '/login', '/register', '/dashboard', '/login-client'],
+    matcher: ['/admin', '/login', '/register', '/dashboard', '/login-client'],
 };
