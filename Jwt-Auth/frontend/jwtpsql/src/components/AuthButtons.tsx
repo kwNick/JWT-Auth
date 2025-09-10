@@ -21,11 +21,11 @@ const AuthButtons = () => {
     return (
         <>
             {/* <LoginNavItems isLoggedIn={login} /> */}
-            <div className={`${!user ? 'block' : 'hidden'} w-full h-full flex items-center justify-end gap-4`}>
-                <Link href="/login-client" className="bg-secondary hover:bg-accent duration-300 font-bold py-2 px-4 rounded">
+            <div className={`${!user ? 'block' : 'hidden'} w-full h-full flex items-center justify-end gap-4 xl:gap-6 2xl:gap-8`}>
+                <Link href="/login-client" className=" duration-300 font-bold py-2 px-4 border-2 border-black">
                     LoginClient
                 </Link>
-                <Link href="/register-client" className="bg-secondary hover:bg-accent duration-300 font-bold py-2 px-4 rounded">
+                <Link href="/register-client" className=" duration-300 font-bold py-2 px-4 border-2 border-black">
                     RegisterClient
                 </Link>
                 {/* <Link href="/login" className="bg-secondary hover:bg-accent duration-300 font-bold py-2 px-4 rounded">
@@ -46,7 +46,7 @@ const AuthButtons = () => {
                 <button
                     onClick={handleSignout2}
                     disabled={isPending}
-                    className={` bg-secondary hover:bg-accent   font-bold py-2 px-4 rounded`}>
+                    className={`font-bold py-2 px-4 border-2 border-black`}>
                     {isPending ? 'Logging Out...' : 'Logout'}
                 </button>
             </div>
