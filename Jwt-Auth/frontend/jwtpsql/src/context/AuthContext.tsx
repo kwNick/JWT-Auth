@@ -28,6 +28,7 @@ type AuthContextType = {
   login: (username: string, password: string) => Promise<boolean | null>;
   logout: () => void;
   register: (username: string, email: string, password: string) => Promise<boolean | null>;
+  deleteProfile: () => void;
   fetchProfile: () => Promise<User | null>;
   fetchUsersWithDetails: () => Promise<User[] | null>;
   fetchUsers: () => Promise<User[] | null>;
@@ -127,7 +128,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setShops(null);
     setRoles(null);
     document.cookie = `role=; max-age=0; path=/`; // Store roles in a non-HttpOnly cookie for middleware access
-    
+
     // optionally call backend /auth/logout-refresh to clear refreshToken
     try {
       await fetch(`https://${API_URL}/auth/logout-refresh`, {
@@ -140,6 +141,27 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
 
   };
+  const deleteProfile = async () => {
+    setToken(null);
+    setRole(null);
+    setUser(null);
+    setUsersWDetails(null);
+    setUsers(null);
+    setShops(null);
+    setRoles(null);
+    document.cookie = `role=; max-age=0; path=/`; // Store roles in a non-HttpOnly cookie for middleware access
+    try {
+      await fetch(`https://${API_URL}/api/delete`, {
+        method: "DELETE",
+        credentials: "include", // sets HttpOnly refresh token
+      });
+    } catch (error) {
+      console.error("Delete Request Failed: " + error);
+    }
+  };
+
+
+  /* - - - - - Fetch Data Functions - - - - - */
 
   // Fetch profile from backend, refresh access token if needed
   const fetchProfile = async (overrideToken?: string): Promise<User | null> => {
@@ -445,7 +467,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, [role]);
 
   return (
-    <AuthContext.Provider value={{ token, role, user, usersWDetails, users, shops, roles, loading, login, register, logout, fetchProfile, fetchUsersWithDetails, fetchUsers, fetchShops, fetchRoles }}>
+    <AuthContext.Provider value={{ token, role, user, usersWDetails, users, shops, roles, loading, login, register, logout, deleteProfile, fetchProfile, fetchUsersWithDetails, fetchUsers, fetchShops, fetchRoles }}>
       {children}
     </AuthContext.Provider>
   );

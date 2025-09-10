@@ -10,7 +10,7 @@ const AuthButtons = () => {
 
     const router = useRouter();
 
-    const handleSignout2 = async () => {
+    const handleSignout2 = () => {
         startTransition(() => {
             logout();
         });
