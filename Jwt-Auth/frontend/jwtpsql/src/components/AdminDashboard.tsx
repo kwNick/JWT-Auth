@@ -12,8 +12,7 @@ const AdminDashboard = () => {
     if(!user && !loading) return <div className="min-w-3/5"><p>You are not logged in.</p></div>;
   return (
     <>
-        {user && !loading &&
-        (
+        {user && (
             <>
                 <div className="w-2/5">
                     <h1 className="text-3xl font-semibold mb-4">Hello, Admin - <span className='capitalize'>{user?.username}</span> - <span className='text-xs'>{user?.roles.map((role: Role) => role.name)}</span></h1>
@@ -68,8 +67,7 @@ const AdminDashboard = () => {
 
 
         <div className='flex flex-col gap-y-5'>
-            {usersWDetails && !loading && 
-            (
+            {usersWDetails && (
                 <div>
                     <h1 className="text-xl font-semibold ">All Connections: </h1>
                     {/* <UsersList /> */}
@@ -89,7 +87,7 @@ const AdminDashboard = () => {
                 </div>
             )}
 
-            {users && !loading &&(
+            {users && (
                 <div>
                     <h1 className="text-xl font-semibold ">Users</h1>
                     {/* <UsersList /> */}
@@ -101,7 +99,7 @@ const AdminDashboard = () => {
                 </div>
             )}
 
-            {shops && !loading && (
+            {shops && (
                 <div>
                     <h1 className="text-xl font-semibold ">Shops</h1>
                     {/* <ShopsList /> */}
@@ -113,7 +111,7 @@ const AdminDashboard = () => {
                 </div>
             )}
 
-            {roles && !loading && (
+            {roles && (
                 <div>
                     <h1 className="text-xl font-semibold ">Roles</h1>
                     {/* <RolesList /> */}

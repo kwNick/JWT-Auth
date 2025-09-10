@@ -8,7 +8,7 @@ const ProfileDashboard = () => {
   if (!user && !loading) return <div className="min-w-3/5"><p>You are not logged in.</p></div>;
   return (
     <>
-        {user && !loading && (
+        {user && (
           <>
             <div className="w-2/5">
               <h1 className="text-3xl font-semibold mb-4">
