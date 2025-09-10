@@ -119,6 +119,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   // logout function
   const logout = async () => {
+    setToken(null);
+    setRole(null);
+    setUser(null);
+    setUsersWDetails(null);
+    setUsers(null);
+    setShops(null);
+    setRoles(null);
+    document.cookie = `role=; max-age=0; path=/`; // Store roles in a non-HttpOnly cookie for middleware access
+    
     // optionally call backend /auth/logout-refresh to clear refreshToken
     try {
       await fetch(`https://${API_URL}/auth/logout-refresh`, {
@@ -129,14 +138,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       console.error("Logout Request Failed: " + error);
     }
 
-    setToken(null);
-    setRole(null);
-    setUser(null);
-    setUsersWDetails(null);
-    setUsers(null);
-    setShops(null);
-    setRoles(null);
-    document.cookie = `role=; max-age=0; path=/`; // Store roles in a non-HttpOnly cookie for middleware access
 
   };
 

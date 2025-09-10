@@ -3,20 +3,20 @@ import { NextRequest, NextResponse } from 'next/server';
 // import { jwtVerify } from 'jose';
 
 export async function middleware(request: NextRequest) {
-    console.log("cookies: " + request.cookies.toString()); // In production, cookies are HttpOnly and won't be accessible via edge middleware
+    // console.log("cookies: " + request.cookies.toString()); // In production, cookies are HttpOnly and won't be accessible via edge middleware
     // Try to save a value on login and access it here, 'role' saved in-memory - if you can't access that then save a front-end cookie that identifies the role
 
     // const refreshToken = request.cookies.get('refreshToken'); // use NextRequest in middleware to access cookies
     // console.log("refreshToken: " + refreshToken);
 
     const role = request.cookies.get('role'); // use NextRequest in middleware to access cookies
-    console.log("role: " + role?.value);
+    // console.log("role: " + role?.value);
 
     let isLoggedIn = false; // Default to false
     if (role?.value) {
         isLoggedIn = true; // If token exists, user is logged in
     }
-    console.log("isLoggedIn: " + isLoggedIn);
+    // console.log("isLoggedIn: " + isLoggedIn);
 
     let isAdmin = false; // Default to false
     if (role?.value.includes('ROLE_ADMIN')) {
