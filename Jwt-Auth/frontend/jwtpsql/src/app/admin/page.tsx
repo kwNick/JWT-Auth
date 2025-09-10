@@ -8,7 +8,7 @@ import User from "@/lib/userModel";
 
 export default function AdminPage(){
     const {user, usersWDetails, users, shops, roles, loading} = useAuth();
-    console.log("user: "+ user + "\nusers: " +users?.toString());
+    // console.log("user: "+ user + "\nusers: " +users?.toString());
 
     return(
          <div className="p-4 flex flex-col gap-y-5 justify-center min-h-[85vh] font-[family-name:var(--font-geist-sans)] bg-white rounded-tl-2xl rounded-br-2xl shadow-md">

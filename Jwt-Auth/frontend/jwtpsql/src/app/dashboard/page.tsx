@@ -12,7 +12,9 @@ export default function ProfilePage() {
   return (
     <div className="p-4 flex flex-col gap-y-5 justify-center min-h-[85vh] font-[family-name:var(--font-geist-sans)] bg-white rounded-tl-2xl rounded-br-2xl shadow-md">
       {loading && <div className="w-3/5"><p>Loading...</p></div>}
+
       {!user && !loading && <div className="w-3/5"><p>You are not logged in.</p></div>}
+      
       {user && !loading &&
         (
           <>

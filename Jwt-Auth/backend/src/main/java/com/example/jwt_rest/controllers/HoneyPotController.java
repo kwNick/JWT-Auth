@@ -191,6 +191,54 @@ public class HoneyPotController {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Nope!");
     }
 
+    @GetMapping("/check.php")
+    public ResponseEntity<String> trapCheckGet() {
+
+        log.warn("HONEYPOT: Attempted access to /check.php GET from IP {}", getClientIP());
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Nope!");
+    }
+
+    @PostMapping("/check.php")
+    public ResponseEntity<String> trapCheckPost() {
+
+        log.warn("HONEYPOT: Attempted access to /check.php POST from IP {}", getClientIP());
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Nope!");
+    }
+
+    @GetMapping("/info.php")
+    public ResponseEntity<String> trapInfoGet() {
+
+        log.warn("HONEYPOT: Attempted access to /info.php GET from IP {}", getClientIP());
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Nope!");
+    }
+
+    @PostMapping("/info.php")
+    public ResponseEntity<String> trapInfoPost() {
+
+        log.warn("HONEYPOT: Attempted access to /info.php POST from IP {}", getClientIP());
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Nope!");
+    }
+
+    @GetMapping("/config.json")
+    public ResponseEntity<String> trapConfigJSONGet() {
+
+        log.warn("HONEYPOT: Attempted access to /config.json GET from IP {}", getClientIP());
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Nope!");
+    }
+
+    @PostMapping("/config.json")
+    public ResponseEntity<String> trapConfigJSONPost() {
+
+        log.warn("HONEYPOT: Attempted access to /config.json POST from IP {}", getClientIP());
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Nope!");
+    }
+
     // @GetMapping("/error")
     // public ResponseEntity<String> trapErrorGet() {
 
