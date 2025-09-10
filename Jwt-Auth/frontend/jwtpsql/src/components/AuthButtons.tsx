@@ -1,6 +1,6 @@
 'use client';
 import Link from "next/link"
-import { useEffect, useState, useTransition } from "react";
+import { useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 
@@ -14,8 +14,8 @@ const AuthButtons = () => {
         startTransition(() => {
             logout();
         });
-        router.replace('/');
-        // router.refresh(); // Trigger a soft page reload after logout; If you don't want to use context
+        // router.replace('/');
+        router.refresh(); // Trigger a soft page reload after logout; If you don't want to use context
     };
 
     return (
