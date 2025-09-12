@@ -99,7 +99,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       const data = await res.json();
       
-      console.log("Registered: "+ JSON.stringify(data));
+      // console.log("Registered: "+ JSON.stringify(data));
 
       const { payload }: {payload: {roles: string[], username: string}} = await jwtVerify(data.fullToken, new TextEncoder().encode("secret-key-making-it-very-strong"));
       
@@ -193,6 +193,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setRole(payload.roles);
         setToken(data.fullToken);
 
+        document.cookie = `role=${payload.roles.join(",")}; max-age=180; path=/; secure; samesite=strict`; // Store roles in a non-HttpOnly cookie for middleware access
+
         // Retry profile fetch with new token
         res = await fetch(`https://${API_URL}/api/profile`, {
           credentials: "include",
@@ -243,6 +245,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setRole(payload.roles);
         setToken(data.fullToken);
 
+        document.cookie = `role=${payload.roles.join(",")}; max-age=180; path=/; secure; samesite=strict`; // Store roles in a non-HttpOnly cookie for middleware access
+
         // Retry profile fetch with new token
         res = await fetch(`https://${API_URL}/api/users`, {
           credentials: "include",
@@ -291,6 +295,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const { payload }: {payload: {roles: string[], username: string}} = await jwtVerify(data.fullToken, new TextEncoder().encode("secret-key-making-it-very-strong"));
         setRole(payload.roles);
         setToken(data.fullToken);
+
+        document.cookie = `role=${payload.roles.join(",")}; max-age=180; path=/; secure; samesite=strict`; // Store roles in a non-HttpOnly cookie for middleware access
 
         // Retry profile fetch with new token
         res = await fetch(`https://${API_URL}/users`, {
@@ -341,6 +347,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setRole(payload.roles);
         setToken(data.fullToken);
 
+        document.cookie = `role=${payload.roles.join(",")}; max-age=180; path=/; secure; samesite=strict`; // Store roles in a non-HttpOnly cookie for middleware access
+
         // Retry profile fetch with new token
         res = await fetch(`https://${API_URL}/shops`, {
           credentials: "include",
@@ -389,6 +397,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const { payload }: {payload: {roles: string[], username: string}} = await jwtVerify(data.fullToken, new TextEncoder().encode("secret-key-making-it-very-strong"));
         setRole(payload.roles);
         setToken(data.fullToken);
+
+        document.cookie = `role=${payload.roles.join(",")}; max-age=180; path=/; secure; samesite=strict`; // Store roles in a non-HttpOnly cookie for middleware access
 
         // Retry profile fetch with new token
         res = await fetch(`https://${API_URL}/roles`, {

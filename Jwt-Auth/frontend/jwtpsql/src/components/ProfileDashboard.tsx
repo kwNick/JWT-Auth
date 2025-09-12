@@ -10,7 +10,7 @@ const ProfileDashboard = () => {
     <>
         {user && (
           <>
-            <div className="w-2/5">
+            <div className="">
               <h1 className="text-3xl font-semibold mb-4">
                 Hello, {user.username} -{" "}
                 <span className="text-xs">{user.roles.map(r => r.name).join(", ")}</span>
