@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 export async function GET() {
   try {
     const cookieStore = await cookies();
-    let token = cookieStore.get("token")?.value;
+    const token = cookieStore.get("token")?.value;
 
     // First attempt: call profile API
     let res = await fetch(`https://${process.env.JWT_AUTH_API_DOMAIN}/api/profile`, {
