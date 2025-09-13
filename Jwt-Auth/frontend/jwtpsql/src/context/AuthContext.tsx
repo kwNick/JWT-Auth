@@ -144,6 +144,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
 
   };
+
+  // delete profile function
   const deleteProfile = async () => {
     setToken(null);
     setRole(null);
