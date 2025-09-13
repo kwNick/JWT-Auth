@@ -21,7 +21,7 @@ const AdminDashboard = () => {
                 <div className="flex gap-8">
                     <div className="w-full max-w-2xl p-3 bg-gray-300 rounded-tl-2xl rounded-br-2xl shadow-md">
 
-                        <h1 className="text-xl font-semibold mb-4">Fetched from springboot /api/user:</h1>
+                        <h1 className="text-xl font-semibold mb-4">Profile:</h1>
 
                         <div className="flex flex-col gap-2">
                             <p><span className="font-semibold">Username</span>: {user?.username}</p>

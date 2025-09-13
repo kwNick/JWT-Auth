@@ -18,8 +18,8 @@ const ProfileDashboard = () => {
             </div>
 
             <div className="flex flex-col gap-8">
-              <div className="w-full max-w-2xl p-3 bg-gray-300 rounded-tl-2xl rounded-br-2xl shadow-md">
-                <h1 className="text-xl font-semibold mb-4">Fetched from Spring Boot /api/profile:</h1>
+              <div className="w-full max-w-2xl ">
+                <h1 className="text-xl font-semibold mb-4 underline">Profile:</h1>
                 <div className="flex flex-col gap-2">
                   <p><span className="font-semibold">Username</span>: {user.username}</p>
                   <p><span className="font-semibold">Email</span>: {user.email}</p>

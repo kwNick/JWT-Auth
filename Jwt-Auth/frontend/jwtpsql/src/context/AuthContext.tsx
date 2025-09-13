@@ -4,6 +4,7 @@ import Role from "@/lib/roleModel";
 import Shop from "@/lib/shopModel";
 import User from "@/lib/userModel";
 import { jwtVerify } from "jose";
+import { useRouter } from "next/navigation";
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 
 // type Role = {id: number, name: string };
@@ -50,11 +51,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [roles, setRoles] = useState<Role[] | null>(null);
   const [loading, setLoading] = useState(true);
 
+  const router = useRouter();
+
   // Login function
   const login = async (username: string, password: string): Promise<boolean | null> => {
     if (!API_URL) return null;
     try {
-      const res = await fetch(`https://${API_URL}/auth/login-refresh`, {
+      const res = await fetch(`http://${API_URL}/auth/login-refresh`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
@@ -89,7 +92,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     if (!API_URL) return null;
 
     try {
-      const res = await fetch(`https://${API_URL}/auth/register-refresh`, {
+      const res = await fetch(`http://${API_URL}/auth/register-refresh`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, email, password }),
@@ -131,7 +134,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     // optionally call backend /auth/logout-refresh to clear refreshToken
     try {
-      await fetch(`https://${API_URL}/auth/logout-refresh`, {
+      await fetch(`http://${API_URL}/auth/logout-refresh`, {
         method: "POST",
         credentials: "include", // sets HttpOnly refresh token
       });
@@ -151,7 +154,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setRoles(null);
     document.cookie = `role=; max-age=0; path=/`; // Store roles in a non-HttpOnly cookie for middleware access
     try {
-      await fetch(`https://${API_URL}/api/delete`, {
+      await fetch(`http://${API_URL}/api/delete`, {
         method: "DELETE",
         credentials: "include", // sets HttpOnly refresh token
       });
@@ -169,14 +172,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     
     const authToken = overrideToken ?? token;
     try {
-      let res = await fetch(`https://${API_URL}/api/profile`, {
+      let res = await fetch(`http://${API_URL}/api/profile`, {
         credentials: "include", // sends HttpOnly refresh token
         headers: authToken ? { Authorization: `Bearer ${authToken}`} : undefined,
       });
 
       // If token expired, refresh
       if (res.status == 403) {
-        const refreshRes = await fetch(`https://${API_URL}/auth/refresh`, {
+        const refreshRes = await fetch(`http://${API_URL}/auth/refresh`, {
           method: "POST",
           credentials: "include", // refreshToken cookie
         });
@@ -196,7 +199,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         document.cookie = `role=${payload.roles.join(",")}; max-age=180; path=/; secure; samesite=strict`; // Store roles in a non-HttpOnly cookie for middleware access
 
         // Retry profile fetch with new token
-        res = await fetch(`https://${API_URL}/api/profile`, {
+        res = await fetch(`http://${API_URL}/api/profile`, {
           credentials: "include",
           headers: { Authorization: `Bearer ${data.fullToken}` },
         });
@@ -221,14 +224,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     const authToken = overrideToken ?? token;
     try {
-      let res = await fetch(`https://${API_URL}/api/users`, {
+      let res = await fetch(`http://${API_URL}/api/users`, {
         credentials: "include", // sends HttpOnly refresh token
         headers: authToken ? { Authorization: `Bearer ${authToken}`} : undefined,
       });
 
       // If token expired, refresh
       if (res.status == 403) {
-        const refreshRes = await fetch(`https://${API_URL}/auth/refresh`, {
+        const refreshRes = await fetch(`http://${API_URL}/auth/refresh`, {
           method: "POST",
           credentials: "include", // refreshToken cookie
         });
@@ -248,7 +251,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         document.cookie = `role=${payload.roles.join(",")}; max-age=180; path=/; secure; samesite=strict`; // Store roles in a non-HttpOnly cookie for middleware access
 
         // Retry profile fetch with new token
-        res = await fetch(`https://${API_URL}/api/users`, {
+        res = await fetch(`http://${API_URL}/api/users`, {
           credentials: "include",
           headers: { Authorization: `Bearer ${data.fullToken}` },
         });
@@ -272,14 +275,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     const authToken = overrideToken ?? token;
     try {
-      let res = await fetch(`https://${API_URL}/users`, {
+      let res = await fetch(`http://${API_URL}/users`, {
         credentials: "include", // sends HttpOnly refresh token
         headers: authToken ? { Authorization: `Bearer ${authToken}`} : undefined,
       });
 
       // If token expired, refresh
       if (res.status == 403) {
-        const refreshRes = await fetch(`https://${API_URL}/auth/refresh`, {
+        const refreshRes = await fetch(`http://${API_URL}/auth/refresh`, {
           method: "POST",
           credentials: "include", // refreshToken cookie
         });
@@ -299,7 +302,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         document.cookie = `role=${payload.roles.join(",")}; max-age=180; path=/; secure; samesite=strict`; // Store roles in a non-HttpOnly cookie for middleware access
 
         // Retry profile fetch with new token
-        res = await fetch(`https://${API_URL}/users`, {
+        res = await fetch(`http://${API_URL}/users`, {
           credentials: "include",
           headers: { Authorization: `Bearer ${data.fullToken}` },
         });
@@ -323,14 +326,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     const authToken = overrideToken ?? token;
     try {
-      let res = await fetch(`https://${API_URL}/shops`, {
+      let res = await fetch(`http://${API_URL}/shops`, {
         credentials: "include", // sends HttpOnly refresh token
         headers: authToken ? { Authorization: `Bearer ${authToken}`} : undefined,
       });
 
       // If token expired, refresh
       if (res.status == 403) {
-        const refreshRes = await fetch(`https://${API_URL}/auth/refresh`, {
+        const refreshRes = await fetch(`http://${API_URL}/auth/refresh`, {
           method: "POST",
           credentials: "include", // refreshToken cookie
         });
@@ -350,7 +353,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         document.cookie = `role=${payload.roles.join(",")}; max-age=180; path=/; secure; samesite=strict`; // Store roles in a non-HttpOnly cookie for middleware access
 
         // Retry profile fetch with new token
-        res = await fetch(`https://${API_URL}/shops`, {
+        res = await fetch(`http://${API_URL}/shops`, {
           credentials: "include",
           headers: { Authorization: `Bearer ${data.fullToken}` },
         });
@@ -374,14 +377,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     const authToken = overrideToken ?? token;
     try {
-      let res = await fetch(`https://${API_URL}/roles`, {
+      let res = await fetch(`http://${API_URL}/roles`, {
         credentials: "include", // sends HttpOnly refresh token
         headers: authToken ? { Authorization: `Bearer ${authToken}`} : undefined,
       });
 
       // If token expired, refresh
       if (res.status == 403) {
-        const refreshRes = await fetch(`https://${API_URL}/auth/refresh`, {
+        const refreshRes = await fetch(`http://${API_URL}/auth/refresh`, {
           method: "POST",
           credentials: "include", // refreshToken cookie
         });
@@ -401,7 +404,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         document.cookie = `role=${payload.roles.join(",")}; max-age=180; path=/; secure; samesite=strict`; // Store roles in a non-HttpOnly cookie for middleware access
 
         // Retry profile fetch with new token
-        res = await fetch(`https://${API_URL}/roles`, {
+        res = await fetch(`http://${API_URL}/roles`, {
           credentials: "include",
           headers: { Authorization: `Bearer ${data.fullToken}` },
         });
@@ -429,11 +432,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 // This pattern is often used to create a new scope, especially in async code,
 // allowing the use of await at the top level without blocking the surrounding code.
   // On mount, attempt to refresh access token automatically
+
   useEffect(() => {
     (async () => {
       await fetchProfile();
       setLoading(false);
     })();
+    // router.refresh()
   }, []);
 
   useEffect(() => {
@@ -471,9 +476,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             fetchShops(),
             fetchRoles(),
           ]);
-        })();
 
-    }
+        })();
+      }
+      router.refresh()
   }, [role]);
 
   return (

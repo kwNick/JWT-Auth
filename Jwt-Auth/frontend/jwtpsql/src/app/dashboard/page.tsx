@@ -4,7 +4,7 @@ import ProfileDashboard from "@/components/ProfileDashboard";
 export default function ProfilePage() {
 
   return (
-    <div className="p-4 flex flex-col gap-y-5 justify-center min-h-[85vh] min-w-3/5 font-[family-name:var(--font-geist-sans)]">
+    <div className="p-4 flex flex-col gap-y-5 justify-center min-h-[85vh] min-w-4/5 font-[family-name:var(--font-geist-sans)]">
       <ProfileDashboard />
       
       <div className="flex flex-col gap-y-4">
