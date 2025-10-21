@@ -46,7 +46,7 @@ const AuthButtons = () => {
                 <button
                     onClick={handleSignout2}
                     disabled={isPending}
-                    className={`font-bold py-2 px-4 border-2 border-black`}>
+                    className={`font-bold py-2 px-4 border-2 border-black cursor-pointer ${isPending ?? 'opacity-50 cursor-not-allowed'}`}>
                     {isPending ? 'Logging Out...' : 'Logout'}
                 </button>
             </div>
