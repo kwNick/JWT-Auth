@@ -153,7 +153,7 @@ flowchart LR
     subgraph Frontend [Next.js Frontend]
         UI[UI Components & Pages]
         Models[TypeScript Models]
-        Auth[JWT Auth ("Access + Refresh Tokens")]
+        Auth["JWT Auth (Access + Refresh Tokens)"]
     end
 
     subgraph Backend [Spring Boot API]
