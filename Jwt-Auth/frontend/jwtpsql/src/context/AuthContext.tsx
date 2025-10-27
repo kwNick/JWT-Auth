@@ -53,6 +53,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const router = useRouter();
 
+  /* - - - - - Authentication Functions - - - - - */
+
   // Login function
   const login = async (username: string, password: string): Promise<boolean | null> => {
     if (!API_URL) return null;
