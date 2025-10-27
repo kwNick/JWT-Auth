@@ -112,6 +112,32 @@ Role.java
 
 ![System Architecture](./DocPhotos/UML-ClassDiagram-Backend-Entities.png)
 
+<!-- @startuml
+class User {
+  +Long id
+  +String email
+  +String username
+  +String password
+  +List<Shop> shops
+  +Set<Role> roles
+}
+
+class Shop {
+  +Long id
+  +String name
+  +String location
+  +User user
+}
+
+class Role {
+  +Long id
+  +String name
+}
+
+User "1" -- "many" Shop : owns >
+User "many" -- "many" Role : assigned >
+@enduml -->
+
 ## 🧠 Architecture Diagram
 
 Purpose: High-level overview showing how your frontend, backend, and database interact.
