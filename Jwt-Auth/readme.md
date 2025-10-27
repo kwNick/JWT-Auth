@@ -148,29 +148,28 @@ Purpose: High-level overview showing how your frontend, backend, and database in
                                   └── JWT Auth (Access + Refresh Tokens)
 ```
 
-```mermaid
-    flowchart LR
+flowchart LR
     subgraph Frontend [Next.js Frontend]
         UI[UI Components & Pages]
         Models[TypeScript Models]
         Auth[JWT Auth (Access + Refresh Tokens)]
     end
 
-    subgraph Backend [Spring Boot API]
+subgraph Backend [Spring Boot API]
         Controller[REST Controllers]
         Service[Service Layer]
         Repo[JPA Repositories]
         Entities[(User, Shop, Role Entities)]
     end
 
-    subgraph Database [PostgreSQL (Neon)]
+subgraph Database [PostgreSQL (Neon)]
         UsersTable[(users)]
         RolesTable[(roles)]
         ShopsTable[(shops)]
         UserRolesTable[(user_roles)]
     end
 
-    UI -->|Fetch/POST| Controller
+UI -->|Fetch/POST| Controller
     Auth --> Controller
     Controller --> Service
     Service --> Repo
