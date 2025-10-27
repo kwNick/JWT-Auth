@@ -163,7 +163,7 @@ flowchart LR
         Entities[(User, Shop, Role Entities)]
     end
 
-    subgraph Database [PostgreSQL (Neon)]
+    subgraph Database ["PostgreSQL (Neon)"]
         UsersTable[(users)]
         RolesTable[(roles)]
         ShopsTable[(shops)]
