@@ -177,3 +177,61 @@ flowchart LR
     Repo --> Database
     Entities --> Repo
 ```
+
+## Sample Data
+
+Users
+
+```json
+    [{
+        "id": 3,
+        "username": "Alex",
+        "password": "hashedpassword1",
+        "email": "alex@example.com",
+        "shops": [{
+            "id": 1,
+            "user_id": 3,
+            "name": "Smoke Shop",
+            "location": "Tallahassee, FL",
+        }],
+        "user_roles": [{
+            "user_id": 3,
+            "role_id": 1,
+        }],
+    }]
+```
+
+Shops
+
+```json
+    [{
+        "id": 1,
+        "user_id": 3,
+        "name": "Smoke Shop",
+        "location": "Tallahassee, FL",
+        "user": {
+            "id": 3,
+            "username": "Alex",
+            "password": "hashedpassword1",
+            "email": "alex@example.com",
+        }
+    }]
+```
+
+Roles
+
+```json
+    [{
+        "id": 1,
+        "name": "ROLE_ADMIN",
+        "user_roles": [{
+            "user_id": 3,
+            "role_id": 1,
+        }]
+    },
+    {
+        "id": 2,
+        "name": "ROLE_USER",
+        "user_roles": []
+    }]
+```
