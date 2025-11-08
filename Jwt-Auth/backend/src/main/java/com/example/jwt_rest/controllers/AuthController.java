@@ -107,7 +107,6 @@ public class AuthController {
     // Because you’re calling /refresh from a server environment (Next.js RSC / server action) where the browser’s cookies don’t exist.
     // The backend is correct: refreshToken is null.
 
-    //Try this ---
     // public ResponseEntity<String> getProfile(@CookieValue(value = "refreshToken", required = false) String refreshToken) {
     @PostMapping("/refresh")
     public ResponseEntity<RefreshResponse> refreshToken(@CookieValue(value="refreshToken", required=false) String refreshToken, HttpServletRequest request, HttpServletResponse response) { 
