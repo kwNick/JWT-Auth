@@ -5,13 +5,13 @@ export default function Home() {
 
         <div className="h-full w-full flex flex-col items-center justify-center ">
           <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-6xl font-semibold underline">
-            POS System
+            JWT-Auth
           </h1>
         </div>
 
         <div className="h-full w-full flex flex-col items-center sm:items-start justify-center">
           <p className="text-base sm:text-2xl md:text-3xl text-center ">
-            This is a simple POS system built with Next.js, TypeScript, and PostgreSQL.
+            This is a simple JWT Authentication system built with Next.js, TypeScript, and PostgreSQL.
             It uses JWT for authentication and is designed to be easy to use and extend authentication system to any application.
           </p>
         </div>

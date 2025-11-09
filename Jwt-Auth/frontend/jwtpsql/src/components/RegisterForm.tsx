@@ -4,8 +4,8 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const RegisterForm = () => {
-
-      const { register } = useAuth();
+  
+  const { register } = useAuth();
   const router = useRouter();
 
   const [username, setUsername] = useState("");
